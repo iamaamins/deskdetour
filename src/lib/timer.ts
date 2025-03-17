@@ -5,11 +5,17 @@ import {
   powerMonitor,
   Tray,
 } from 'electron';
-import { BREAK_TIME, IDLE_THRESHOLD, WORK_TIME } from './config';
+import { BREAK_TIME, IDLE_THRESHOLD, MOVE_TIME, WORK_TIME } from './config';
 
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
-const state = { isPaused: false, isBreakTime: false, timeRemaining: WORK_TIME };
+const state = {
+  isPaused: false,
+  isViewTime: false,
+  isMoveTime: false,
+  sessionCount: 0,
+  timeRemaining: WORK_TIME,
+};
 
 // Utils
 const notify = (title: string, body: string) =>
@@ -28,21 +34,29 @@ export function startTimers(mainWindow: BrowserWindow, tray: Tray) {
     state.timeRemaining--;
 
     if (state.timeRemaining <= 0) {
-      if (!state.isBreakTime) {
+      console.log(state.sessionCount);
+      if (!state.isViewTime && state.sessionCount < 2) {
         notify('Break Time!', 'Look 20 feet further for 20 seconds');
         state.timeRemaining = BREAK_TIME;
-        state.isBreakTime = true;
+        state.isViewTime = true;
+        state.sessionCount++;
+      } else if (!state.isMoveTime && state.sessionCount >= 2) {
+        notify('Move Time!', 'Move/exercise for 5 minutes');
+        state.timeRemaining = MOVE_TIME;
+        state.isMoveTime = true;
+        state.sessionCount = 0;
       } else {
         notify('Work Time!', 'Back to work! Next break in 20 minutes');
         state.timeRemaining = WORK_TIME;
-        state.isBreakTime = false;
+        state.isViewTime = false;
+        state.isMoveTime = false;
       }
     }
 
     const minutes = Math.floor(state.timeRemaining / 60);
     const seconds = Math.floor(state.timeRemaining % 60);
     tray.setTitle(
-      `${state.isBreakTime ? 'Break' : 'Work'}: ${formatTime(
+      `${state.isViewTime ? 'View' : state.isMoveTime ? 'Move' : 'Work'}: ${formatTime(
         minutes,
       )}:${formatTime(seconds)}`,
     );
@@ -69,7 +83,8 @@ export function stopTimers() {
 
 export function resetMainTimer() {
   state.isPaused = false;
-  state.isBreakTime = false;
+  state.isViewTime = false;
+  state.isMoveTime = false;
   state.timeRemaining = WORK_TIME;
 }
 

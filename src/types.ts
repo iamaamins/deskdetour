@@ -1,6 +1,7 @@
 export type TimerState = {
   timeRemaining: number;
-  isBreakTime: boolean;
+  isViewTime: boolean;
+  isMoveTime: boolean;
   isPaused: boolean;
 };
 
