@@ -5,7 +5,7 @@ import {
   powerMonitor,
   Tray,
 } from 'electron';
-import { BREAK_TIME, IDLE_THRESHOLD, MOVE_TIME, WORK_TIME } from './config';
+import { VIEW_TIME, IDLE_THRESHOLD, MOVE_TIME, WORK_TIME } from './config';
 
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
@@ -37,7 +37,7 @@ export function startTimers(mainWindow: BrowserWindow, tray: Tray) {
       console.log(state.sessionCount);
       if (!state.isViewTime && state.sessionCount < 2) {
         notify('Break Time!', 'Look 20 feet further for 20 seconds');
-        state.timeRemaining = BREAK_TIME;
+        state.timeRemaining = VIEW_TIME;
         state.isViewTime = true;
         state.sessionCount++;
       } else if (!state.isMoveTime && state.sessionCount >= 2) {
