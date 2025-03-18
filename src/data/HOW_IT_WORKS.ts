@@ -5,13 +5,19 @@ export const HOW_IT_WORKS = [
       'Desk Detour launches automatically at login and runs in the background.',
   },
   {
-    title: 'Work for 20 Minutes',
-    description: 'Stay focused on your tasks without interruptions.',
+    title: 'Work Notification',
+    description:
+      'Stay focused on your tasks for 20 minutes without interruptions.',
   },
   {
-    title: 'Take a 20-Second Break',
+    title: 'View Notification',
     description:
-      'After 20 minutes, Desk Detour notifies you to look at something 20 feet away for 20 seconds.',
+      'After a work session, Desk Detour notifies you to look at something 20 feet away for 20 seconds.',
+  },
+  {
+    title: 'Move Notification',
+    description:
+      'After 1 hour of work, Desk Detour reminds you to move or exercise for 5 minutes.',
   },
   {
     title: 'Idle Detection',
