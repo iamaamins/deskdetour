@@ -17,7 +17,7 @@ export const HOW_IT_WORKS = [
   {
     title: 'Move Notification',
     description:
-      'After 1 hour of work, Desk Detour reminds you to move or exercise for 5 minutes.',
+      'After 1 hour of work, Desk Detour reminds you to move or exercise for 2 minutes.',
   },
   {
     title: 'Idle Detection',
