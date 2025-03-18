@@ -5,10 +5,10 @@ export default function HowItWorks() {
     <main className='mx-auto w-xl'>
       <section className='flex h-screen flex-col items-center justify-center space-y-4'>
         <div className='space-y-1'>
-          <h1 className='text-3xl font-bold'>How Vision Guard Works?</h1>
+          <h1 className='text-3xl font-bold'>How Desk Detour Works?</h1>
           <p className='opacity-80'>
-            Vision Guard runs in the background and sends timely notifications,
-            helping you maintain productivity while taking care of your vision.
+            Desk Detour runs in the background and sends timely notifications,
+            helping you maintain productivity while taking care of your health.
           </p>
         </div>
         <div className='space-y-2'>

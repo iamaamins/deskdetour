@@ -1,8 +1,8 @@
 {
-  "name": "visionguard",
-  "productName": "Vision Guard",
+  "name": "deskdetour",
+  "productName": "Desk Detour",
   "version": "1.0.0",
-  "description": "Take care of your vision",
+  "description": "Smart breaks for better health",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",

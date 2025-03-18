@@ -113,7 +113,7 @@ export function createApplicationMenu(app: App) {
         {
           label: 'Learn More',
           click: async () =>
-            await shell.openExternal('https://www.visionguard.app'),
+            await shell.openExternal('https://www.deskdetour.com'),
         },
       ],
     },
