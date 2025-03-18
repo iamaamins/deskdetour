@@ -5,7 +5,13 @@ import {
   powerMonitor,
   Tray,
 } from 'electron';
-import { VIEW_TIME, IDLE_THRESHOLD, MOVE_TIME, WORK_TIME } from './config';
+import {
+  VIEW_TIME,
+  IDLE_THRESHOLD,
+  MOVE_TIME,
+  WORK_TIME,
+  SESSION_THRESHOLD,
+} from './config';
 
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
@@ -34,22 +40,26 @@ export function startTimers(mainWindow: BrowserWindow, tray: Tray) {
     state.timeRemaining--;
 
     if (state.timeRemaining <= 0) {
-      console.log(state.sessionCount);
-      if (!state.isViewTime && state.sessionCount < 2) {
+      if (state.isViewTime) {
+        notify('Work Time!', 'Back to work! Next break in 20 minutes');
+        state.timeRemaining = WORK_TIME;
+        state.isViewTime = false;
+
+        if (state.sessionCount >= SESSION_THRESHOLD) {
+          state.isMoveTime = true;
+          state.timeRemaining = MOVE_TIME;
+          notify('Move Time!', 'Move/exercise for 5 minutes');
+          state.sessionCount = 0;
+        }
+      } else if (state.isMoveTime) {
+        notify('Work Time!', 'Back to work! Next break in 20 minutes');
+        state.timeRemaining = WORK_TIME;
+        state.isMoveTime = false;
+      } else {
         notify('Break Time!', 'Look 20 feet further for 20 seconds');
         state.timeRemaining = VIEW_TIME;
         state.isViewTime = true;
         state.sessionCount++;
-      } else if (!state.isMoveTime && state.sessionCount >= 2) {
-        notify('Move Time!', 'Move/exercise for 5 minutes');
-        state.timeRemaining = MOVE_TIME;
-        state.isMoveTime = true;
-        state.sessionCount = 0;
-      } else {
-        notify('Work Time!', 'Back to work! Next break in 20 minutes');
-        state.timeRemaining = WORK_TIME;
-        state.isViewTime = false;
-        state.isMoveTime = false;
       }
     }
 
