@@ -2,6 +2,7 @@ import { App } from 'electron';
 import path from 'node:path';
 import { isDev, isMac } from './config';
 import AutoLaunch from 'auto-launch';
+import { exec } from 'child_process';
 
 export function getTrayIconPath(app: App) {
   const icon = isMac ? 'trayIconTemplate.png' : 'trayIcon.png';
@@ -29,11 +30,8 @@ export function playMoveNotificationSound(app: App) {
     : path.join(process.resourcesPath, 'assets', filename);
 
   if (isMac) {
-    require('child_process').exec(`afplay "${filePath}"`);
+    exec(`afplay "${filePath}"`);
   } else {
-    require('child_process').exec(
-      `powershell -c (New-Object Media.SoundPlayer "${filePath}").PlaySync()`,
-      (err: Error) => console.error('Error playing sound on Windows:', err),
-    );
+    exec(`powershell -c (New-Object Media.SoundPlayer "${filePath}").Play()`);
   }
 }
