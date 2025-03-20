@@ -1,4 +1,5 @@
 import {
+  App,
   BrowserWindow,
   ipcMain,
   Notification,
@@ -12,6 +13,7 @@ import {
   WORK_TIME,
   SESSION_THRESHOLD,
 } from './config';
+import { playMoveNotificationSound } from './utils';
 
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
@@ -30,7 +32,7 @@ const notify = (title: string, body: string) =>
 const formatTime = (time: number) => time.toString().padStart(2, '0');
 
 // Start the timers
-export function startTimers(mainWindow: BrowserWindow, tray: Tray) {
+export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
   if (mainTimer) clearInterval(mainTimer);
   if (idleTimer) clearInterval(idleTimer);
 
@@ -50,6 +52,7 @@ export function startTimers(mainWindow: BrowserWindow, tray: Tray) {
 
         if (state.sessionCount >= SESSION_THRESHOLD) {
           notify('Move Time!', `Move/exercise for ${MOVE_TIME / 60} minutes`);
+          playMoveNotificationSound(app);
           state.timeRemaining = MOVE_TIME;
           state.isMoveTime = true;
           state.sessionCount = 0;
@@ -101,12 +104,13 @@ export function resetMainTimer() {
   state.isPaused = false;
   state.isViewTime = false;
   state.isMoveTime = false;
+  state.sessionCount = 0;
   state.timeRemaining = WORK_TIME;
 }
 
-export function handleEvents(mainWindow: BrowserWindow, tray: Tray) {
+export function handleEvents(app: App, mainWindow: BrowserWindow, tray: Tray) {
   ipcMain.handle('timer:reset', () => resetMainTimer());
   powerMonitor.on('lock-screen', () => stopTimers());
   powerMonitor.on('shutdown', () => stopTimers());
-  powerMonitor.on('unlock-screen', () => startTimers(mainWindow, tray));
+  powerMonitor.on('unlock-screen', () => startTimers(app, mainWindow, tray));
 }

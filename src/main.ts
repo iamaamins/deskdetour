@@ -22,8 +22,8 @@ app.on('ready', async () => {
   // Start update checker
   initiateUpdateChecker(mainWindow);
 
-  // Start main and idle timers
-  startTimers(mainWindow, tray);
+  // Start timers
+  startTimers(app, mainWindow, tray);
 
   // Event listeners
   mainWindow.on('close', (e) => {
@@ -31,5 +31,5 @@ app.on('ready', async () => {
     mainWindow.hide();
     if (isMac) app.dock.hide();
   });
-  handleEvents(mainWindow, tray);
+  handleEvents(app, mainWindow, tray);
 });
