@@ -49,9 +49,9 @@ export function startTimers(mainWindow: BrowserWindow, tray: Tray) {
         state.isViewTime = false;
 
         if (state.sessionCount >= SESSION_THRESHOLD) {
-          state.isMoveTime = true;
-          state.timeRemaining = MOVE_TIME;
           notify('Move Time!', `Move/exercise for ${MOVE_TIME / 60} minutes`);
+          state.timeRemaining = MOVE_TIME;
+          state.isMoveTime = true;
           state.sessionCount = 0;
         }
       } else if (state.isMoveTime) {
