@@ -8,6 +8,7 @@ import {
   createApplicationMenu,
 } from './lib/system';
 import { setApplicationAsLoginItem } from './lib/utils';
+import { initiateUpdateChecker } from './lib/update';
 
 if (started) app.quit();
 
@@ -17,6 +18,9 @@ app.on('ready', async () => {
   const tray = createTray(app, mainWindow);
   createApplicationMenu(app);
   await setApplicationAsLoginItem(app);
+
+  // Start update checker
+  initiateUpdateChecker(mainWindow);
 
   // Start main and idle timers
   startTimers(mainWindow, tray);

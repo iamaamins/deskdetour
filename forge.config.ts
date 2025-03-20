@@ -10,6 +10,7 @@ import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import { mainConfig } from './webpack.main.config';
 import { rendererConfig } from './webpack.renderer.config';
+import { PublisherGithub } from '@electron-forge/publisher-github';
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -54,6 +55,15 @@ const config: ForgeConfig = {
       [FuseV1Options.EnableNodeCliInspectArguments]: false,
       [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
+    }),
+  ],
+  publishers: [
+    new PublisherGithub({
+      repository: {
+        owner: 'iamaamins',
+        name: 'deskdetour',
+      },
+      authToken: process.env.GITHUB_TOKEN,
     }),
   ],
 };
