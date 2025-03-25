@@ -17,8 +17,8 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
-      loadingGif: './src/assets/loading.gif',
       setupIcon: './src/assets/icon.ico',
+      loadingGif: './src/assets/loading.gif',
     }),
     new MakerDMG({
       format: 'ULFO',
