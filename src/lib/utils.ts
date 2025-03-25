@@ -24,7 +24,7 @@ export async function setApplicationAsLoginItem(app: App) {
 }
 
 export function playNotificationSound(app: App, type: 'view' | 'move') {
-  const filename = `${type}-notification.mpg`;
+  const filename = `${type}-notification.mp3`;
   const filePath = isDev
     ? path.join(app.getAppPath(), 'src', 'assets', filename)
     : path.join(process.resourcesPath, 'assets', filename);
