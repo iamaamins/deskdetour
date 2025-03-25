@@ -16,7 +16,10 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({ setupIcon: './src/assets/icon.ico' }),
+    new MakerSquirrel({
+      loadingGif: './src/assets/loading.gif',
+      setupIcon: './src/assets/icon.ico',
+    }),
     new MakerDMG({
       format: 'ULFO',
       background: './src/assets/DMGInstallerBackground.png',
