@@ -17,7 +17,7 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
+    new MakerSquirrel({ iconUrl: '', setupIcon: './src/assets/icon.ico' }),
     new MakerDMG({
       format: 'ULFO',
       background: './src/assets/DMGInstallerBackground.png',
