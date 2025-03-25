@@ -16,7 +16,6 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.6.1",
     "@electron-forge/plugin-fuses": "^7.6.1",
     "@electron-forge/plugin-webpack": "^7.6.1",
-    "@electron-forge/publisher-github": "^7.7.0",
     "@electron/fuses": "^1.8.0",
     "@tailwindcss/postcss": "^4.0.5",
     "@types/auto-launch": "^5.0.5",
