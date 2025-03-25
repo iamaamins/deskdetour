@@ -51,15 +51,6 @@ const config: ForgeConfig = {
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
   ],
-  publishers: [
-    new PublisherGithub({
-      repository: {
-        owner: 'iamaamins',
-        name: 'deskdetour',
-      },
-      authToken: process.env.GITHUB_TOKEN,
-    }),
-  ],
 };
 
 export default config;
