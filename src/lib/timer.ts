@@ -13,7 +13,7 @@ import {
   WORK_TIME,
   SESSION_THRESHOLD,
 } from './config';
-import { playMoveNotificationSound } from './utils';
+import { playNotificationSound } from './utils';
 
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
@@ -52,7 +52,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
 
         if (state.sessionCount >= SESSION_THRESHOLD) {
           notify('Move Time!', `Move/exercise for ${MOVE_TIME / 60} minutes`);
-          playMoveNotificationSound(app);
+          playNotificationSound(app, 'move');
           state.timeRemaining = MOVE_TIME;
           state.isMoveTime = true;
           state.sessionCount = 0;
@@ -66,6 +66,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
         state.isMoveTime = false;
       } else {
         notify('Break Time!', `Look 20 feet further for ${VIEW_TIME} seconds`);
+        playNotificationSound(app, 'view');
         state.timeRemaining = VIEW_TIME;
         state.isViewTime = true;
         state.sessionCount++;
