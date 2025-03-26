@@ -18,7 +18,7 @@ export default function HowItWorks() {
             </div>
           ))}
         </div>
-        <p className='text-sm opacity-90'>
+        <p className='text-sm'>
           Made by{' '}
           <a
             href='https://x.com/iamaamins'

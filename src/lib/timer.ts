@@ -43,7 +43,6 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
             'Work Time!',
             `Back to work! Next break in ${WORK_TIME / 60} minutes`,
           );
-          playNotificationSound(app, 'work');
           state.timeRemaining = WORK_TIME;
           state.isWorkTime = true;
         } else if (state.sessionCount >= SESSION_THRESHOLD) {
@@ -60,7 +59,6 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
           'Work Time!',
           `Back to work! Next break in ${WORK_TIME / 60} minutes`,
         );
-        playNotificationSound(app, 'work');
         state.timeRemaining = WORK_TIME;
         state.isWorkTime = true;
         state.isMoveTime = false;
