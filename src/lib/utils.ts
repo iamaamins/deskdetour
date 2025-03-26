@@ -1,4 +1,4 @@
-import { App } from 'electron';
+import { App, Notification } from 'electron';
 import path from 'node:path';
 import { isDev, isMac, isWin } from './config';
 import AutoLaunch from 'auto-launch';
@@ -39,3 +39,8 @@ export function playNotificationSound(
       `powershell -c (New-Object Media.SoundPlayer '${filePath}').PlaySync()`,
     );
 }
+
+export const notify = (title: string, body: string) =>
+  new Notification({ title, body }).show();
+
+export const formatTime = (time: number) => time.toString().padStart(2, '0');

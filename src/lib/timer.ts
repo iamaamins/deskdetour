@@ -1,11 +1,4 @@
-import {
-  App,
-  BrowserWindow,
-  ipcMain,
-  Notification,
-  powerMonitor,
-  Tray,
-} from 'electron';
+import { App, BrowserWindow, ipcMain, powerMonitor, Tray } from 'electron';
 import {
   VIEW_TIME,
   IDLE_THRESHOLD,
@@ -13,24 +6,18 @@ import {
   WORK_TIME,
   SESSION_THRESHOLD,
 } from './config';
-import { playNotificationSound } from './utils';
+import { formatTime, notify, playNotificationSound } from './utils';
 
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
 const state = {
   isPaused: false,
-  isWorkTime: true,
   isViewTime: false,
   isMoveTime: false,
   sessionCount: 0,
+  isWorkTime: true,
   timeRemaining: WORK_TIME,
 };
-
-// Utils
-const notify = (title: string, body: string) =>
-  new Notification({ title, body }).show();
-
-const formatTime = (time: number) => time.toString().padStart(2, '0');
 
 // Start the timers
 export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
@@ -50,9 +37,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
         state.isViewTime = true;
         state.sessionCount++;
         state.isWorkTime = false;
-      }
-
-      if (state.isViewTime) {
+      } else if (state.isViewTime) {
         if (state.sessionCount < SESSION_THRESHOLD) {
           notify(
             'Work Time!',
@@ -61,9 +46,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
           playNotificationSound(app, 'work');
           state.timeRemaining = WORK_TIME;
           state.isWorkTime = true;
-        }
-
-        if (state.sessionCount >= SESSION_THRESHOLD) {
+        } else if (state.sessionCount >= SESSION_THRESHOLD) {
           notify('Move Time!', `Move/exercise for ${MOVE_TIME / 60} minutes`);
           playNotificationSound(app, 'move');
           state.timeRemaining = MOVE_TIME;
@@ -72,9 +55,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
         }
 
         state.isViewTime = false;
-      }
-
-      if (state.isMoveTime) {
+      } else if (state.isMoveTime) {
         notify(
           'Work Time!',
           `Back to work! Next break in ${WORK_TIME / 60} minutes`,
@@ -119,6 +100,7 @@ export function resetMainTimer() {
   state.isViewTime = false;
   state.isMoveTime = false;
   state.sessionCount = 0;
+  state.isWorkTime = true;
   state.timeRemaining = WORK_TIME;
 }
 
