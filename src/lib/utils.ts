@@ -3,6 +3,7 @@ import path from 'node:path';
 import { isDev, isMac, isWin } from './config';
 import AutoLaunch from 'auto-launch';
 import { exec } from 'child_process';
+import { NotificationBody, NotificationTitle } from '../../src/types';
 
 export function getTrayIconPath(app: App) {
   const icon = isMac ? 'trayIconTemplate.png' : 'icon.ico';
@@ -37,7 +38,11 @@ export function playNotificationSound(app: App, type: 'view' | 'move') {
     );
 }
 
-export const notify = (title: string, body: string) =>
-  new Notification({ title, body }).show();
+export const notify = (title: NotificationTitle, body: NotificationBody) =>
+  new Notification({
+    title,
+    body,
+    silent: title === 'Work Time!' ? false : true,
+  }).show();
 
 export const formatTime = (time: number) => time.toString().padStart(2, '0');

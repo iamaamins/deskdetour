@@ -1,3 +1,5 @@
+import { NOTIFICATION } from './lib/notification';
+
 export type TimerState = {
   isPaused: boolean;
   isWorkTime: boolean;
@@ -14,3 +16,8 @@ declare global {
     };
   }
 }
+
+export type NotificationTitle =
+  (typeof NOTIFICATION)[keyof typeof NOTIFICATION]['title'];
+export type NotificationBody =
+  (typeof NOTIFICATION)[keyof typeof NOTIFICATION]['body'];

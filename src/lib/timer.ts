@@ -7,6 +7,7 @@ import {
   SESSION_THRESHOLD,
 } from './config';
 import { formatTime, notify, playNotificationSound } from './utils';
+import { NOTIFICATION } from './notification';
 
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
@@ -31,7 +32,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
 
     if (state.timeRemaining <= 0) {
       if (state.isWorkTime) {
-        notify('View Time!', `Look 20 feet further for ${VIEW_TIME} seconds`);
+        notify(NOTIFICATION.view.title, NOTIFICATION.view.body);
         playNotificationSound(app, 'view');
         state.timeRemaining = VIEW_TIME;
         state.isViewTime = true;
@@ -39,14 +40,11 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
         state.isWorkTime = false;
       } else if (state.isViewTime) {
         if (state.sessionCount < SESSION_THRESHOLD) {
-          notify(
-            'Work Time!',
-            `Back to work! Next break in ${WORK_TIME / 60} minutes`,
-          );
+          notify(NOTIFICATION.work.title, NOTIFICATION.work.body);
           state.timeRemaining = WORK_TIME;
           state.isWorkTime = true;
         } else if (state.sessionCount >= SESSION_THRESHOLD) {
-          notify('Move Time!', `Move/exercise for ${MOVE_TIME / 60} minutes`);
+          notify(NOTIFICATION.move.title, NOTIFICATION.move.body);
           playNotificationSound(app, 'move');
           state.timeRemaining = MOVE_TIME;
           state.isMoveTime = true;
@@ -55,10 +53,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
 
         state.isViewTime = false;
       } else if (state.isMoveTime) {
-        notify(
-          'Work Time!',
-          `Back to work! Next break in ${WORK_TIME / 60} minutes`,
-        );
+        notify(NOTIFICATION.work.title, NOTIFICATION.work.body);
         state.timeRemaining = WORK_TIME;
         state.isWorkTime = true;
         state.isMoveTime = false;
