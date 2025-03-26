@@ -36,6 +36,6 @@ export function playNotificationSound(
 
   if (isWin)
     return exec(
-      `powershell -c (New-Object Media.SoundPlayer '${filePath}').Play()`,
+      `powershell -c (New-Object Media.SoundPlayer '${filePath}').PlaySync()`,
     );
 }
