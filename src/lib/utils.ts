@@ -23,7 +23,10 @@ export async function setApplicationAsLoginItem(app: App) {
   }
 }
 
-export function playNotificationSound(app: App, type: 'view' | 'move') {
+export function playNotificationSound(
+  app: App,
+  type: 'view' | 'move' | 'work',
+) {
   const filename = `${type}-notification.wav`;
   const filePath = isDev
     ? path.join(app.getAppPath(), 'src', 'assets', filename)

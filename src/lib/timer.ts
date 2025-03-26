@@ -48,6 +48,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
             'Work Time!',
             `Back to work! Next break in ${WORK_TIME / 60} minutes`,
           );
+          playNotificationSound(app, 'work');
           state.timeRemaining = WORK_TIME;
           state.isViewTime = false;
         } else {
@@ -62,6 +63,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
           'Work Time!',
           `Back to work! Next break in ${WORK_TIME / 60} minutes`,
         );
+        playNotificationSound(app, 'work');
         state.timeRemaining = WORK_TIME;
         state.isMoveTime = false;
       } else {
