@@ -43,14 +43,14 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
 
     if (state.timeRemaining <= 0) {
       if (state.isViewTime) {
-        notify(
-          'Work Time!',
-          `Back to work! Next break in ${WORK_TIME / 60} minutes`,
-        );
-        state.timeRemaining = WORK_TIME;
-        state.isViewTime = false;
-
-        if (state.sessionCount >= SESSION_THRESHOLD) {
+        if (state.sessionCount < SESSION_THRESHOLD) {
+          notify(
+            'Work Time!',
+            `Back to work! Next break in ${WORK_TIME / 60} minutes`,
+          );
+          state.timeRemaining = WORK_TIME;
+          state.isViewTime = false;
+        } else {
           notify('Move Time!', `Move/exercise for ${MOVE_TIME / 60} minutes`);
           playNotificationSound(app, 'move');
           state.timeRemaining = MOVE_TIME;
@@ -65,7 +65,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
         state.timeRemaining = WORK_TIME;
         state.isMoveTime = false;
       } else {
-        notify('Break Time!', `Look 20 feet further for ${VIEW_TIME} seconds`);
+        notify('View Time!', `Look 20 feet further for ${VIEW_TIME} seconds`);
         playNotificationSound(app, 'view');
         state.timeRemaining = VIEW_TIME;
         state.isViewTime = true;

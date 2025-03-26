@@ -33,6 +33,6 @@ export function playNotificationSound(app: App, type: 'view' | 'move') {
 
   if (isWin)
     return exec(
-      `powershell -c (New-Object Media.SoundPlayer '${filePath}').PlaySync();`,
+      `powershell -c (New-Object Media.SoundPlayer '${filePath}').Play()`,
     );
 }
