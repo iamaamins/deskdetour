@@ -32,10 +32,10 @@ export function playNotificationSound(
     ? path.join(app.getAppPath(), 'src', 'assets', filename)
     : path.join(process.resourcesPath, 'assets', filename);
 
-  if (isMac) return exec(`afplay "${filePath}"`);
+  if (isMac) exec(`afplay "${filePath}"`);
 
   if (isWin)
-    return exec(
+    exec(
       `powershell -c (New-Object Media.SoundPlayer '${filePath}').PlaySync()`,
     );
 }

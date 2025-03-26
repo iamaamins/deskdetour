@@ -14,7 +14,11 @@ export default function Home() {
       {timer && (
         <section className='flex h-screen flex-col items-center justify-center gap-2'>
           <p className='text-2xl font-medium'>
-            {timer.isViewTime ? 'View' : timer.isMoveTime ? 'Move' : 'Work'}
+            {timer.isWorkTime
+              ? 'Work'
+              : timer.isViewTime
+                ? 'View'
+                : timer.isMoveTime && 'Move'}
           </p>
           <div className='flex items-center text-9xl font-bold'>
             <p>{Math.floor(timer.timeRemaining / 60)}</p>

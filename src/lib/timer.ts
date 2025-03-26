@@ -19,6 +19,7 @@ let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
 const state = {
   isPaused: false,
+  isWorkTime: true,
   isViewTime: false,
   isMoveTime: false,
   sessionCount: 0,
@@ -42,6 +43,15 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
     state.timeRemaining--;
 
     if (state.timeRemaining <= 0) {
+      if (state.isWorkTime) {
+        notify('View Time!', `Look 20 feet further for ${VIEW_TIME} seconds`);
+        playNotificationSound(app, 'view');
+        state.timeRemaining = VIEW_TIME;
+        state.isViewTime = true;
+        state.sessionCount++;
+        state.isWorkTime = false;
+      }
+
       if (state.isViewTime) {
         if (state.sessionCount < SESSION_THRESHOLD) {
           notify(
@@ -50,35 +60,36 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
           );
           playNotificationSound(app, 'work');
           state.timeRemaining = WORK_TIME;
-          state.isViewTime = false;
-        } else {
+          state.isWorkTime = true;
+        }
+
+        if (state.sessionCount >= SESSION_THRESHOLD) {
           notify('Move Time!', `Move/exercise for ${MOVE_TIME / 60} minutes`);
           playNotificationSound(app, 'move');
           state.timeRemaining = MOVE_TIME;
           state.isMoveTime = true;
           state.sessionCount = 0;
         }
-      } else if (state.isMoveTime) {
+
+        state.isViewTime = false;
+      }
+
+      if (state.isMoveTime) {
         notify(
           'Work Time!',
           `Back to work! Next break in ${WORK_TIME / 60} minutes`,
         );
         playNotificationSound(app, 'work');
         state.timeRemaining = WORK_TIME;
+        state.isWorkTime = true;
         state.isMoveTime = false;
-      } else {
-        notify('View Time!', `Look 20 feet further for ${VIEW_TIME} seconds`);
-        playNotificationSound(app, 'view');
-        state.timeRemaining = VIEW_TIME;
-        state.isViewTime = true;
-        state.sessionCount++;
       }
     }
 
     const minutes = Math.floor(state.timeRemaining / 60);
     const seconds = Math.floor(state.timeRemaining % 60);
     tray.setTitle(
-      `${state.isViewTime ? 'View' : state.isMoveTime ? 'Move' : 'Work'}: ${formatTime(
+      `${state.isWorkTime ? 'Work' : state.isViewTime ? 'View' : state.isMoveTime && 'Move'}: ${formatTime(
         minutes,
       )}:${formatTime(seconds)}`,
     );

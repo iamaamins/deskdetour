@@ -1,8 +1,9 @@
 export type TimerState = {
-  timeRemaining: number;
+  isPaused: boolean;
+  isWorkTime: boolean;
   isViewTime: boolean;
   isMoveTime: boolean;
-  isPaused: boolean;
+  timeRemaining: number;
 };
 
 declare global {
