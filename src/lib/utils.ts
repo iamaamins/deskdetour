@@ -1,6 +1,6 @@
 import { App } from 'electron';
 import path from 'node:path';
-import { isDev, isMac } from './config';
+import { isDev, isMac, isWin } from './config';
 import AutoLaunch from 'auto-launch';
 import { exec } from 'child_process';
 
@@ -29,9 +29,10 @@ export function playNotificationSound(app: App, type: 'view' | 'move') {
     ? path.join(app.getAppPath(), 'src', 'assets', filename)
     : path.join(process.resourcesPath, 'assets', filename);
 
-  if (isMac) {
-    exec(`afplay "${filePath}"`);
-  } else {
-    exec(`powershell -c (New-Object Media.SoundPlayer "${filePath}").Play()`);
-  }
+  if (isMac) return exec(`afplay "${filePath}"`);
+
+  if (isWin)
+    return exec(
+      `powershell -c "& {Add-Type -AssemblyName System.Windows.Forms; (New-Object System.Windows.Forms.SoundPlayer '${filePath}').PlaySync()}"`,
+    );
 }
