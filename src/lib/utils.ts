@@ -5,7 +5,7 @@ import AutoLaunch from 'auto-launch';
 import { exec } from 'child_process';
 
 export function getTrayIconPath(app: App) {
-  const icon = isMac ? 'trayIconTemplate.png' : 'trayIcon.png';
+  const icon = isMac ? 'trayIconTemplate.png' : 'icon.ico';
 
   return isDev
     ? path.join(app.getAppPath(), 'src', 'assets', icon)
@@ -33,6 +33,6 @@ export function playNotificationSound(app: App, type: 'view' | 'move') {
 
   if (isWin)
     return exec(
-      `powershell -c "& {Add-Type -AssemblyName presentationCore; $mediaPlayer = New-Object system.windows.media.mediaplayer; $mediaPlayer.open('${filePath}'); $mediaPlayer.Play()}"`,
+      `powershell -c (New-Object WMPLib.WindowsMediaPlayer).controls.play(); (New-Object -ComObject WMPLib.WindowsMediaPlayer).url = '${filePath}';`,
     );
 }
