@@ -69,21 +69,25 @@ export function createApplicationMenu(app: App) {
     : [{ role: 'close' }];
 
   const menuItemOptions: MenuItemConstructorOptions[] = [
-    {
-      role: 'appMenu',
-      label: app.name,
-      submenu: [
-        { role: 'about' },
-        { type: 'separator' },
-        { role: 'services' },
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideOthers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        { role: 'quit' },
-      ],
-    },
+    ...(isMac
+      ? [
+          {
+            role: 'appMenu',
+            label: app.name,
+            submenu: [
+              { role: 'about' },
+              { type: 'separator' },
+              { role: 'services' },
+              { type: 'separator' },
+              { role: 'hide' },
+              { role: 'hideOthers' },
+              { role: 'unhide' },
+              { type: 'separator' },
+              { role: 'quit' },
+            ],
+          } as MenuItemConstructorOptions,
+        ]
+      : []),
     {
       role: 'fileMenu',
       label: 'File',
