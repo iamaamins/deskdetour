@@ -18,6 +18,16 @@ export default function HowItWorks() {
             </div>
           ))}
         </div>
+        <p className='text-sm opacity-90'>
+          Made by{' '}
+          <a
+            href='https://x.com/iamaamins'
+            target='_blank'
+            className='text-peach underline'
+          >
+            @iamaamins
+          </a>
+        </p>
       </section>
     </main>
   );

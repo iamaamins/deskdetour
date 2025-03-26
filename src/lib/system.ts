@@ -1,4 +1,3 @@
-import path from 'node:path';
 import {
   App,
   BrowserWindow,
@@ -14,16 +13,23 @@ import { getTrayIconPath } from './utils';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
-export function createMainWindow(app: App) {
+export function createMainWindow() {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     resizable: false,
-    icon: path.join(app.getAppPath(), 'src', 'assets', 'icon.png'),
-    webPreferences: { preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY },
+    webPreferences: {
+      devTools: false,
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+    },
   });
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+
+  mainWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url);
+    return { action: 'deny' };
+  });
 
   return mainWindow;
 }

@@ -13,7 +13,7 @@ if (started) app.quit();
 
 app.on('ready', async () => {
   // System functions
-  const mainWindow = createMainWindow(app);
+  const mainWindow = createMainWindow();
   const tray = createTray(app, mainWindow);
   createApplicationMenu(app);
   await setApplicationAsLoginItem(app);
