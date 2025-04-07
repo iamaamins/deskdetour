@@ -10,7 +10,7 @@
     "make:mac:int": "electron-forge make --platform darwin --arch x64",
     "make:mac:arm": "electron-forge make --platform darwin --arch arm64",
     "make:win:int": "electron-forge make --platform win32 --arch x64",
-    "make:win:arm": "electron-forge make --platform win32 --arch x64",
+    "make:win:arm": "electron-forge make --platform win32 --arch arm64",
     "make:mac": "npm run make:mac:int && npm run make:mac:arm",
     "make:win": "npm run make:win:int && npm run make:win:arm"
   },
