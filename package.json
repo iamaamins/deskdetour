@@ -2,7 +2,7 @@
   "name": "deskdetour",
   "productName": "Desk Detour",
   "version": "1.0.0",
-  "description": "Smart breaks for better health",
+  "description": "Smart breaks for a healthier, more productive workday",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
