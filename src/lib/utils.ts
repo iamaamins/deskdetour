@@ -42,10 +42,6 @@ export function playNotificationSound(
 }
 
 export const notify = (title: NotificationTitle, body: NotificationBody) =>
-  new Notification({
-    title,
-    body,
-    silent: title === 'Work Time!' ? false : true,
-  }).show();
+  new Notification({ title, body, silent: true }).show();
 
 export const formatTime = (time: number) => time.toString().padStart(2, '0');
