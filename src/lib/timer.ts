@@ -41,6 +41,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
       } else if (state.isViewTime) {
         if (state.sessionCount < SESSION_THRESHOLD) {
           notify(NOTIFICATION.work.title, NOTIFICATION.work.body);
+          playNotificationSound(app, 'break-over');
           state.timeRemaining = WORK_TIME;
           state.isWorkTime = true;
         } else if (state.sessionCount >= SESSION_THRESHOLD) {
@@ -54,6 +55,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
         state.isViewTime = false;
       } else if (state.isMoveTime) {
         notify(NOTIFICATION.work.title, NOTIFICATION.work.body);
+        playNotificationSound(app, 'break-over');
         state.timeRemaining = WORK_TIME;
         state.isWorkTime = true;
         state.isMoveTime = false;
