@@ -13,6 +13,16 @@ export default function Home() {
     return window.timer.onUpdate((state) => setTimer(state));
   }, []);
 
+  const isViewTimeComingUp = (timer: TimerState) => timer.isWorkTime;
+
+  const isWorkTimeComingUp = (timer: TimerState) =>
+    (timer.isViewTime || timer.isMoveTime) && timer.sessionCount < 3;
+
+  const isMoveTimeComingUp = (timer: TimerState) =>
+    timer.isViewTime && timer.sessionCount >= 3;
+
+  const remainingSessionCount = (timer: TimerState) => 3 - timer.sessionCount;
+
   return (
     <main className='mx-auto w-xl'>
       {timer && (
@@ -44,31 +54,30 @@ export default function Home() {
             <div className='flex items-center gap-4'>
               <p className='flex items-center gap-1.5'>
                 <span className='border-green bg-green/50 flex h-6 w-6 items-center justify-center rounded-md border p-1'>
-                  {timer.isWorkTime ? (
+                  {isViewTimeComingUp(timer) ? (
                     <IoEyeOutline />
-                  ) : timer.sessionCount < 3 &&
-                    (timer.isViewTime || timer.isMoveTime) ? (
+                  ) : isWorkTimeComingUp(timer) ? (
                     <IoDesktopOutline />
                   ) : (
-                    <MdOutlineSportsGymnastics />
-                  )}{' '}
+                    isMoveTimeComingUp(timer) && <MdOutlineSportsGymnastics />
+                  )}
                 </span>
                 <span>
-                  {timer.isWorkTime
+                  {isViewTimeComingUp(timer)
                     ? 'View'
-                    : timer.sessionCount < 3 &&
-                        (timer.isViewTime || timer.isMoveTime)
+                    : isWorkTimeComingUp(timer)
                       ? 'Work'
-                      : 'Move'}{' '}
+                      : isMoveTimeComingUp(timer) && 'Move'}{' '}
                   session
                 </span>
               </p>
               <p className='flex items-center gap-1.5'>
                 <span className='border-green bg-green/50 flex h-6 w-6 items-center justify-center rounded-md border p-1 font-bold'>
-                  {3 - timer.sessionCount}
+                  {remainingSessionCount(timer)}
                 </span>
                 <span>
-                  {3 - timer.sessionCount > 1 ? 'sessions' : 'session'} before{' '}
+                  {remainingSessionCount(timer) > 1 ? 'sessions' : 'session'}{' '}
+                  before{' '}
                   <Link className='text-peach underline' to='/exercises'>
                     move
                   </Link>

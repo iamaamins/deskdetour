@@ -5,7 +5,7 @@ export default function Exercises() {
     <main className='mx-auto w-xl'>
       <section className='flex h-screen flex-col justify-center space-y-4'>
         <h1 className='text-3xl font-bold'>
-          Exercises I Do During Move Sessions:
+          Exercises I Do During a Move Session :
         </h1>
         {EXERCISES.map((exercise, index) => (
           <div className='flex gap-4'>
@@ -18,7 +18,11 @@ export default function Exercises() {
               </h2>
               <p className='opacity-90'>
                 {exercise.description} Here's a quick YouTube video on{' '}
-                <a href={exercise.url} className='text-peach underline'>
+                <a
+                  target='_blank'
+                  href={exercise.url}
+                  className='text-peach underline'
+                >
                   how to do {exercise.name.toLowerCase()}.
                 </a>
               </p>
