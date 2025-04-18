@@ -38,14 +38,15 @@ export default function Home() {
           >
             <RiResetLeftLine /> Reset
           </button>
-          <div className='border-slight-gray mt-2 space-y-2 rounded-md border p-4'>
-            <p className='text-lg font-semibold'>Coming up:</p>
-            <div className='flex items-center gap-2'>
+          <div className='border-slight-gray mt-2 space-y-2 rounded-xl border p-4'>
+            <p className='text-lg font-medium'>Coming up:</p>
+            <div className='flex items-center gap-4'>
               <p className='flex items-center gap-1.5'>
                 <span className='border-green bg-green/50 flex h-6 w-6 items-center justify-center rounded-md border p-1'>
                   {timer.isWorkTime ? (
                     <IoEyeOutline />
-                  ) : timer.isViewTime && timer.sessionCount < 3 ? (
+                  ) : timer.sessionCount < 3 &&
+                    (timer.isViewTime || timer.isMoveTime) ? (
                     <IoDesktopOutline />
                   ) : (
                     <MdOutlineSportsGymnastics />
@@ -54,7 +55,8 @@ export default function Home() {
                 <span>
                   {timer.isWorkTime
                     ? 'View'
-                    : timer.isViewTime && timer.sessionCount < 3
+                    : timer.sessionCount < 3 &&
+                        (timer.isViewTime || timer.isMoveTime)
                       ? 'Work'
                       : 'Move'}{' '}
                   session
@@ -64,7 +66,10 @@ export default function Home() {
                 <span className='border-green bg-green/50 flex h-6 w-6 items-center justify-center rounded-md border p-1 font-bold'>
                   {3 - timer.sessionCount}
                 </span>
-                <span>session/s before move</span>
+                <span>
+                  {3 - timer.sessionCount > 1 ? 'sessions' : 'session'} before
+                  move
+                </span>
               </p>
             </div>
           </div>
