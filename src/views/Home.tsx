@@ -3,6 +3,7 @@ import { TimerState } from '../types';
 import { RiResetLeftLine } from 'react-icons/ri';
 import { IoEyeOutline } from 'react-icons/io5';
 import { IoDesktopOutline } from 'react-icons/io5';
+import { Link } from 'react-router';
 import { MdOutlineSportsGymnastics } from 'react-icons/md';
 
 export default function Home() {
@@ -67,8 +68,10 @@ export default function Home() {
                   {3 - timer.sessionCount}
                 </span>
                 <span>
-                  {3 - timer.sessionCount > 1 ? 'sessions' : 'session'} before
-                  move
+                  {3 - timer.sessionCount > 1 ? 'sessions' : 'session'} before{' '}
+                  <Link className='text-peach underline' to='/exercises'>
+                    move
+                  </Link>
                 </span>
               </p>
             </div>
