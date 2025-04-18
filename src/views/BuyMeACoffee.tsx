@@ -5,7 +5,7 @@ export default function BuyMeACoffee() {
     <main className='mx-auto w-xl'>
       <section className='flex h-screen flex-col items-center justify-center space-y-4 text-center'>
         <div className='max-w-md space-y-2'>
-          <h1 className='text-3xl font-bold'>Buy me a coffee</h1>
+          <h1 className='text-3xl font-bold'>Buy Me a Coffee</h1>
           <p className='opacity-90'>
             Buy me a coffee to support the development and keep Desk Detour free
             for everyone!

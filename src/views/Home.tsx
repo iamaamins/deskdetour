@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { TimerState } from '../types';
 import { RiResetLeftLine } from 'react-icons/ri';
+import { IoEyeOutline } from 'react-icons/io5';
+import { IoDesktopOutline } from 'react-icons/io5';
+import { MdOutlineSportsGymnastics } from 'react-icons/md';
 
 export default function Home() {
   const [timer, setTimer] = useState<TimerState | null>(null);
@@ -29,13 +32,41 @@ export default function Home() {
                 .padStart(2, '0')}
             </p>
           </div>
-          <div className='flex items-center gap-2'>
-            <button
-              onClick={() => window.timer.reset()}
-              className='bg-slight-gray flex h-10 w-10 cursor-pointer items-center justify-center rounded-md'
-            >
-              <RiResetLeftLine />
-            </button>
+          <button
+            onClick={() => window.timer.reset()}
+            className='bg-slight-gray flex cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2'
+          >
+            <RiResetLeftLine /> Reset
+          </button>
+          <div className='border-slight-gray mt-2 space-y-2 rounded-md border p-4'>
+            <p className='text-lg font-semibold'>Coming up:</p>
+            <div className='flex items-center gap-2'>
+              <p className='flex items-center gap-1.5'>
+                <span className='border-green bg-green/50 flex h-6 w-6 items-center justify-center rounded-md border p-1'>
+                  {timer.isWorkTime ? (
+                    <IoEyeOutline />
+                  ) : timer.isViewTime && timer.sessionCount < 3 ? (
+                    <IoDesktopOutline />
+                  ) : (
+                    <MdOutlineSportsGymnastics />
+                  )}{' '}
+                </span>
+                <span>
+                  {timer.isWorkTime
+                    ? 'View'
+                    : timer.isViewTime && timer.sessionCount < 3
+                      ? 'Work'
+                      : 'Move'}{' '}
+                  session
+                </span>
+              </p>
+              <p className='flex items-center gap-1.5'>
+                <span className='border-green bg-green/50 flex h-6 w-6 items-center justify-center rounded-md border p-1 font-bold'>
+                  {3 - timer.sessionCount}
+                </span>
+                <span>session/s before move</span>
+              </p>
+            </div>
           </div>
         </section>
       )}

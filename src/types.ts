@@ -6,6 +6,7 @@ export type TimerState = {
   isViewTime: boolean;
   isMoveTime: boolean;
   timeRemaining: number;
+  sessionCount: number;
 };
 
 declare global {

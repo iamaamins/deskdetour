@@ -4,7 +4,7 @@ export default function HowItWorks() {
   return (
     <main className='mx-auto w-xl'>
       <section className='flex h-screen flex-col justify-center space-y-4'>
-        <h1 className='text-3xl font-bold'>How Desk Detour works?</h1>
+        <h1 className='text-3xl font-bold'>How Desk Detour Works?</h1>
         <div className='space-y-2'>
           {HOW_IT_WORKS.map((el, index) => (
             <div className='flex gap-4'>
