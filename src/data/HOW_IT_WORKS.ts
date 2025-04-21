@@ -20,7 +20,7 @@ export const HOW_IT_WORKS = [
   {
     title: 'Idle Detection',
     description:
-      'Automatically pauses after 2.5 minutes of inactivity, resuming on return.',
+      'Automatically pauses after 5 minutes of inactivity, resuming on return.',
   },
   {
     title: 'Hands-Free Operation',

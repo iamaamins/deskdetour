@@ -18,16 +18,29 @@ export default function HowItWorks() {
             </div>
           ))}
         </div>
-        <p className='text-sm'>
-          Made by{' '}
-          <a
-            href='https://x.com/iamaamins'
-            target='_blank'
-            className='text-peach underline'
-          >
-            @iamaamins
-          </a>
-        </p>
+        <div className='flex items-center gap-1 text-sm'>
+          <p>
+            Made by{' '}
+            <a
+              href='https://x.com/iamaamins'
+              target='_blank'
+              className='text-peach underline'
+            >
+              @iamaamins
+            </a>
+          </p>
+          <span className='bg-green h-1.5 w-1.5 rounded-full'></span>
+          <p>
+            <a
+              href='https://deskdetour.com/subscribe'
+              target='_blank'
+              className='text-peach underline'
+            >
+              Subscribe
+            </a>{' '}
+            for updates on the next release
+          </p>
+        </div>
       </section>
     </main>
   );
