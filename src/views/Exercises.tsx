@@ -4,9 +4,7 @@ export default function Exercises() {
   return (
     <main className='mx-auto w-xl'>
       <section className='flex h-screen flex-col justify-center space-y-4'>
-        <h1 className='text-3xl font-bold'>
-          Exercises I Do During a Move Session :
-        </h1>
+        <h1 className='text-3xl font-bold'>Exercises for a Move Session:</h1>
         {EXERCISES.map((exercise, index) => (
           <div className='flex gap-4'>
             <span className='bg-green flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full font-semibold text-white'>
@@ -36,7 +34,8 @@ export default function Exercises() {
         </p>
         <p>
           If your workplace isn't exercise-friendly, even a 2-minute brisk walk
-          every hour can make a big difference to your health. Happy working!
+          or gentle stretching every hour can make a big difference to your
+          health. Happy detouring!
         </p>
       </section>
     </main>
