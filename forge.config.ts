@@ -17,7 +17,7 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
-      iconUrl: 'https://deskdetour.com/icon.ico',
+      iconUrl: 'https://www.deskdetour.com/icon.ico',
       setupIcon: './src/assets/icon.ico',
       loadingGif: './src/assets/loading.gif',
     }),
