@@ -46,7 +46,7 @@ export default function Home() {
           </div>
           <button
             onClick={() => window.timer.reset()}
-            className='bg-slight-gray flex cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2'
+            className='bg-slight-gray flex cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2'
           >
             <RiResetLeftLine /> Reset
           </button>
@@ -91,7 +91,7 @@ export default function Home() {
       <Link
         target='_blank'
         to='https://deskdetour.com/buy-me-a-coffee'
-        className='group text-white-black-scheme bg-yellow absolute right-4 bottom-4 flex h-8 w-8 items-center gap-1 overflow-hidden rounded-full px-[8px] transition-all duration-300 hover:w-[149.5px]'
+        className='group text-white-black-scheme bg-yellow border-yellow absolute right-4 bottom-4 flex h-8 w-8 items-center gap-1 overflow-hidden rounded-full border px-[8px] transition-all duration-300 hover:w-[149.5px]'
       >
         <span>
           <BiCoffeeTogo />
