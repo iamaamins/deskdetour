@@ -19,7 +19,7 @@ export default function BuyMeACoffee() {
             className='h-[60px] w-[217px]'
           />
         </Link>
-        <p className='text-sm opacity-90'>Thank you for your support!</p>
+        <p className='text-sm opacity-90'>Thank you for your support 💛</p>
       </section>
     </main>
   );
