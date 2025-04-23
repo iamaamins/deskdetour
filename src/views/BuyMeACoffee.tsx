@@ -8,8 +8,8 @@ export default function BuyMeACoffee() {
         <div className='max-w-md space-y-2'>
           <h1 className='text-3xl font-bold'>Buy Me a Coffee</h1>
           <p className='opacity-90'>
-            Buy me a coffee to support the development and keep Desk Detour free
-            for everyone!
+            Buy me a coffee (or two) to support the development and keep Desk
+            Detour free for everyone!
           </p>
         </div>
         <Link to='https://www.buymeacoffee.com/iamaamins' target='_blank'>
