@@ -24,7 +24,7 @@ export default function HowItWorks() {
             <a
               href='https://x.com/iamaamins'
               target='_blank'
-              className='text-peach underline'
+              className='text-yellow underline'
             >
               @iamaamins
             </a>
@@ -34,7 +34,7 @@ export default function HowItWorks() {
             <a
               href='https://deskdetour.com/subscribe'
               target='_blank'
-              className='text-peach underline'
+              className='text-yellow underline'
             >
               Subscribe
             </a>{' '}

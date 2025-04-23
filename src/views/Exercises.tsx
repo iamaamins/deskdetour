@@ -27,7 +27,7 @@ export default function Exercises() {
                 <a
                   target='_blank'
                   href={exercise.url}
-                  className='text-peach underline'
+                  className='text-yellow underline'
                 >
                   how to do {exercise.name.toLowerCase()}.
                 </a>

@@ -1,7 +1,6 @@
 import { IoHomeOutline } from 'react-icons/io5';
 import { Link } from 'react-router';
 import { BsExclamationCircle } from 'react-icons/bs';
-import { BiCoffeeTogo } from 'react-icons/bi';
 import { MdOutlineSportsGymnastics } from 'react-icons/md';
 
 export default function Navigation() {
@@ -12,9 +11,6 @@ export default function Navigation() {
       </Link>
       <Link to='/exercises'>
         <MdOutlineSportsGymnastics />
-      </Link>
-      <Link to='/buy-me-a-coffee'>
-        <BiCoffeeTogo />
       </Link>
       <Link to='/how-it-works'>
         <BsExclamationCircle />

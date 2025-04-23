@@ -5,6 +5,7 @@ import { IoEyeOutline } from 'react-icons/io5';
 import { IoDesktopOutline } from 'react-icons/io5';
 import { Link } from 'react-router';
 import { MdOutlineSportsGymnastics } from 'react-icons/md';
+import { BiCoffeeTogo } from 'react-icons/bi';
 
 export default function Home() {
   const [timer, setTimer] = useState<TimerState | null>(null);
@@ -78,7 +79,7 @@ export default function Home() {
                 <span>
                   {remainingSessionCount(timer) > 1 ? 'sessions' : 'session'}{' '}
                   before{' '}
-                  <Link className='text-peach underline' to='/exercises'>
+                  <Link className='text-yellow underline' to='/exercises'>
                     move
                   </Link>
                 </span>
@@ -87,6 +88,18 @@ export default function Home() {
           </div>
         </section>
       )}
+      <Link
+        target='_blank'
+        to='https://deskdetour.com/buy-me-a-coffee'
+        className='group text-white-black-scheme bg-yellow absolute right-4 bottom-4 flex h-8 w-8 items-center gap-1 overflow-hidden rounded-full px-[8px] transition-all duration-300 hover:w-[149.5px]'
+      >
+        <span>
+          <BiCoffeeTogo />
+        </span>
+        <span className='text-nowrap opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+          Buy me a coffee
+        </span>
+      </Link>
     </main>
   );
 }
