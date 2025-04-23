@@ -4,7 +4,15 @@ export default function Exercises() {
   return (
     <main className='mx-auto w-xl'>
       <section className='flex h-screen flex-col justify-center space-y-4'>
-        <h1 className='text-3xl font-bold'>Exercises for a Move Session:</h1>
+        <div className='space-y-1'>
+          <h1 className='text-3xl font-bold'>Exercise Suggestions</h1>
+          <p>
+            The creator of Desk Detour enjoys doing these exercises during a
+            move session. However, if your workplace isn’t exercise-friendly,
+            even a brisk two-minute walk or some gentle stretching every hour
+            can make a big difference to your health.
+          </p>
+        </div>
         {EXERCISES.map((exercise, index) => (
           <div className='flex gap-4'>
             <span className='bg-green flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full font-semibold text-white'>
@@ -30,12 +38,7 @@ export default function Exercises() {
         <p>
           Working 8 hours a day, 5 days a week adds up to 600 push-ups, 600
           bodyweight squats, and 1,800 jumping jacks per week. It adds up faster
-          than you'd think.
-        </p>
-        <p>
-          If your workplace isn't exercise-friendly, even a 2-minute brisk walk
-          or gentle stretching every hour can make a big difference to your
-          health. Happy detouring!
+          than you'd think. Happy detouring!
         </p>
       </section>
     </main>
