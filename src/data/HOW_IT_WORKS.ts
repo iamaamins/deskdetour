@@ -5,7 +5,7 @@ export const HOW_IT_WORKS = [
   },
   {
     title: 'Work Session',
-    description: 'Starts with a 20-minute work session.',
+    description: 'Starts with a 15-minute work session.',
   },
   {
     title: 'View Notification',
@@ -15,7 +15,7 @@ export const HOW_IT_WORKS = [
   {
     title: 'Move Notification',
     description:
-      'After 3 sessions, notifies you to take a 2-minute movement break.',
+      'After 2 work sessions, notifies you to take a 2-minute movement break.',
   },
   {
     title: 'Idle Detection',

@@ -17,12 +17,12 @@ export default function Home() {
   const isViewTimeComingUp = (timer: TimerState) => timer.isWorkTime;
 
   const isWorkTimeComingUp = (timer: TimerState) =>
-    (timer.isViewTime || timer.isMoveTime) && timer.sessionCount < 3;
+    (timer.isViewTime || timer.isMoveTime) && timer.sessionCount < 2;
 
   const isMoveTimeComingUp = (timer: TimerState) =>
-    timer.isViewTime && timer.sessionCount >= 3;
+    timer.isViewTime && timer.sessionCount >= 2;
 
-  const remainingSessionCount = (timer: TimerState) => 3 - timer.sessionCount;
+  const remainingSessionCount = (timer: TimerState) => 2 - timer.sessionCount;
 
   return (
     <main className='mx-auto w-xl'>
