@@ -6,7 +6,13 @@ import {
   shell,
   MenuItemConstructorOptions,
 } from 'electron';
-import { resetTimer, pauseTimer, resumeTimer, stopTimers } from './timer';
+import {
+  resetTimer,
+  pauseTimer,
+  resumeTimer,
+  stopTimers,
+  isTimerPaused,
+} from './timer';
 import { isMac } from './config';
 import { getTrayIconPath } from './utils';
 
@@ -37,9 +43,8 @@ export function createMainWindow() {
 export function createTray(app: App, mainWindow: BrowserWindow) {
   const tray = new Tray(getTrayIconPath(app));
 
-  let isPaused = false;
-
   function buildTrayMenu() {
+    const isPaused = isTimerPaused();
     const contextMenu = Menu.buildFromTemplate([
       {
         label: `Open ${app.name}`,
@@ -48,11 +53,11 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
           if (isMac) app.dock.show();
         },
       },
+      { type: 'separator' },
       {
         label: 'Reset Timer',
         click: () => {
           resetTimer();
-          isPaused = false;
           buildTrayMenu();
         },
       },
@@ -61,7 +66,6 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
         visible: !isPaused,
         click: () => {
           pauseTimer();
-          isPaused = true;
           buildTrayMenu();
         },
       },
@@ -70,10 +74,10 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
         visible: isPaused,
         click: () => {
           resumeTimer();
-          isPaused = false;
           buildTrayMenu();
         },
       },
+      { type: 'separator' },
       {
         label: `Quit ${app.name}`,
         click: () => {

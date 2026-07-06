@@ -46,6 +46,10 @@ function updateDisplays(
   mainWindow.webContents.send('timer:update', state);
 }
 
+export function isTimerPaused() {
+  return state.isPaused;
+}
+
 export function pauseTimer() {
   state.isPaused = true;
 }
