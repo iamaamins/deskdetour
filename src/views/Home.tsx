@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { PauseDuration, TimerState } from '../types';
+import { TimerState } from '../types';
 import { RiResetLeftLine } from 'react-icons/ri';
 import {
   IoDesktopOutline,
@@ -10,13 +10,6 @@ import {
 import { Link } from 'react-router';
 import { MdOutlineSportsGymnastics } from 'react-icons/md';
 import { BiCoffeeTogo } from 'react-icons/bi';
-
-type PauseOption = { label: string; minutes: PauseDuration };
-
-const PAUSE_OPTIONS: PauseOption[] = [
-  { label: '45m', minutes: 45 },
-  { label: '2h', minutes: 120 },
-];
 
 export default function Home() {
   const [timer, setTimer] = useState<TimerState | null>(null);
@@ -35,21 +28,12 @@ export default function Home() {
 
   const remainingSessionCount = (timer: TimerState) => 2 - timer.sessionCount;
 
-  const pauseUntil = !timer?.pauseUntil
-    ? 0
-    : Math.max(0, Math.ceil((timer.pauseUntil - Date.now()) / 1000));
-
-  const pauseReason = pauseUntil ? 'manual' : timer?.isIdle ? 'idle' : null;
-
-  const displayedTime =
-    pauseReason === 'manual' ? pauseUntil : timer?.timeRemaining || 0;
-
   return (
     <main className='mx-auto w-xl'>
       {timer && (
         <section className='flex h-screen flex-col items-center justify-center gap-2'>
           <p className='text-2xl font-medium'>
-            {pauseReason === 'manual' || pauseReason === 'idle'
+            {timer.isPaused || timer.isIdle
               ? 'Paused'
               : timer.isWorkTime
                 ? 'Work'
@@ -58,42 +42,36 @@ export default function Home() {
                   : timer.isMoveTime && 'Move'}
           </p>
           <div className='flex items-center text-9xl font-bold'>
-            <p>{Math.floor(displayedTime / 60)}</p>
+            <p>{Math.floor(timer.timeRemaining / 60)}</p>
             <span>:</span>
             <p>
-              {Math.floor(displayedTime % 60)
+              {Math.floor(timer.timeRemaining % 60)
                 .toString()
                 .padStart(2, '0')}
             </p>
           </div>
           <div className='flex items-center gap-2'>
-            {pauseReason === 'manual' ? (
+            <button
+              onClick={() => window.timer.reset()}
+              className='bg-slight-gray flex cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2'
+            >
+              <RiResetLeftLine /> Reset
+            </button>
+            {timer.isPaused && !timer.isIdle ? (
               <button
                 onClick={() => window.timer.resume()}
                 className='bg-yellow text-white-black-scheme flex cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2'
               >
                 <IoPlayOutline /> Resume
               </button>
-            ) : pauseReason === null ? (
-              <>
-                <button
-                  onClick={() => window.timer.reset()}
-                  className='bg-slight-gray flex cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2'
-                >
-                  <RiResetLeftLine /> Reset
-                </button>
-                {PAUSE_OPTIONS.map(({ label, minutes }) => (
-                  <button
-                    key={minutes}
-                    onClick={() => window.timer.pause(minutes)}
-                    className='bg-slight-gray flex cursor-pointer items-center justify-center gap-2 rounded-full px-3 py-2'
-                    aria-label={`Pause reminders for ${minutes} minutes`}
-                  >
-                    <IoPauseOutline /> Pause {label}
-                  </button>
-                ))}
-              </>
-            ) : null}
+            ) : (
+              <button
+                onClick={() => window.timer.pause()}
+                className='bg-slight-gray flex cursor-pointer items-center justify-center gap-2 rounded-full px-3 py-2'
+              >
+                <IoPauseOutline /> Pause
+              </button>
+            )}
           </div>
           <div className='border-slight-gray mt-2 space-y-2 rounded-xl border p-4'>
             <p className='text-lg font-medium'>Coming up:</p>

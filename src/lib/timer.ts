@@ -8,14 +8,14 @@ import {
 } from './config';
 import { formatTime, notify, playNotificationSound } from './utils';
 import { NOTIFICATION } from './notification';
-import { PauseDuration, TimerState } from '../types';
+import { TimerState } from '../types';
 
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
 
 const state: TimerState = {
   isIdle: false,
-  pauseUntil: null,
+  isPaused: false,
   isViewTime: false,
   isMoveTime: false,
   sessionCount: 0,
@@ -27,13 +27,9 @@ function updateDisplays(
   mainWindow: BrowserWindow,
   tray: Tray,
   pauseReason: 'manual' | 'idle' | null,
-  pauseUntil: number,
 ) {
   if (pauseReason === 'manual') {
-    const minutes = Math.floor(pauseUntil / 60);
-    const seconds = pauseUntil % 60;
-
-    tray.setTitle(`Paused: ${formatTime(minutes)}:${formatTime(seconds)}`);
+    tray.setTitle('Paused');
   } else if (pauseReason === 'idle') {
     tray.setTitle('Paused: Idle');
   } else {
@@ -50,12 +46,12 @@ function updateDisplays(
   mainWindow.webContents.send('timer:update', state);
 }
 
-export function pauseTimer(minutes: PauseDuration) {
-  state.pauseUntil = Date.now() + minutes * 60 * 1000;
+export function pauseTimer() {
+  state.isPaused = true;
 }
 
 export function resumeTimer() {
-  state.pauseUntil = null;
+  state.isPaused = false;
 }
 
 export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
@@ -63,13 +59,11 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
   if (idleTimer) clearInterval(idleTimer);
 
   mainTimer = setInterval(() => {
-    const pauseUntil = !state.pauseUntil
-      ? 0
-      : Math.max(0, Math.ceil((state.pauseUntil - Date.now()) / 1000));
-
-    if (!pauseUntil && state.pauseUntil) state.pauseUntil = null;
-
-    const pauseReason = pauseUntil ? 'manual' : state.isIdle ? 'idle' : null;
+    const pauseReason = state.isPaused
+      ? 'manual'
+      : state.isIdle
+        ? 'idle'
+        : null;
 
     if (!pauseReason) {
       state.timeRemaining--;
@@ -107,7 +101,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
       }
     }
 
-    updateDisplays(mainWindow, tray, pauseReason, pauseUntil);
+    updateDisplays(mainWindow, tray, pauseReason);
   }, 1000);
 
   idleTimer = setInterval(() => {
@@ -117,6 +111,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
 }
 
 export function resetTimer() {
+  state.isPaused = false;
   state.isViewTime = false;
   state.isMoveTime = false;
   state.sessionCount = 0;
@@ -136,10 +131,12 @@ export function stopTimers() {
 
 export function handleEvents(app: App, mainWindow: BrowserWindow, tray: Tray) {
   ipcMain.handle('timer:reset', () => resetTimer());
-  ipcMain.handle('timer:pause', (_, minutes: PauseDuration) =>
-    pauseTimer(minutes),
-  );
-  ipcMain.handle('timer:resume', () => resumeTimer());
+  ipcMain.handle('timer:pause', () => {
+    pauseTimer();
+  });
+  ipcMain.handle('timer:resume', () => {
+    resumeTimer();
+  });
   powerMonitor.on('lock-screen', () => stopTimers());
   powerMonitor.on('shutdown', () => stopTimers());
   powerMonitor.on('unlock-screen', () => startTimers(app, mainWindow, tray));

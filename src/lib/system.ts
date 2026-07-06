@@ -37,35 +37,58 @@ export function createMainWindow() {
 export function createTray(app: App, mainWindow: BrowserWindow) {
   const tray = new Tray(getTrayIconPath(app));
 
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: `Open ${app.name}`,
-      click: () => {
-        mainWindow.show();
-        if (isMac) app.dock.show();
-      },
-    },
-    { label: 'Reset Timer', click: () => resetTimer() },
-    {
-      label: 'Pause Timer',
-      submenu: [
-        { label: '45 Minutes', click: () => pauseTimer(45) },
-        { label: '2 Hours', click: () => pauseTimer(120) },
-      ],
-    },
-    { label: 'Resume Timer', click: () => resumeTimer() },
-    {
-      label: `Quit ${app.name}`,
-      click: () => {
-        mainWindow.removeAllListeners();
-        tray.removeAllListeners();
-        stopTimers();
-        app.quit();
-      },
-    },
-  ]);
+  let isPaused = false;
 
-  tray.setContextMenu(contextMenu);
+  function buildTrayMenu() {
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: `Open ${app.name}`,
+        click: () => {
+          mainWindow.show();
+          if (isMac) app.dock.show();
+        },
+      },
+      {
+        label: 'Reset Timer',
+        click: () => {
+          resetTimer();
+          isPaused = false;
+          buildTrayMenu();
+        },
+      },
+      {
+        label: 'Pause Timer',
+        visible: !isPaused,
+        click: () => {
+          pauseTimer();
+          isPaused = true;
+          buildTrayMenu();
+        },
+      },
+      {
+        label: 'Resume Timer',
+        visible: isPaused,
+        click: () => {
+          resumeTimer();
+          isPaused = false;
+          buildTrayMenu();
+        },
+      },
+      {
+        label: `Quit ${app.name}`,
+        click: () => {
+          mainWindow.removeAllListeners();
+          tray.removeAllListeners();
+          stopTimers();
+          app.quit();
+        },
+      },
+    ]);
+
+    tray.setContextMenu(contextMenu);
+  }
+
+  buildTrayMenu();
   tray.setToolTip(app.name);
 
   return tray;
