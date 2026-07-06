@@ -1,47 +1,67 @@
+import {
+  IoArrowUpOutline,
+  IoEyeOutline,
+  IoNotificationsOutline,
+  IoPauseOutline,
+  IoPlayOutline,
+  IoTimerOutline,
+} from 'react-icons/io5';
 import { HOW_IT_WORKS } from '../data/HOW_IT_WORKS';
+
+const icons = [
+  IoPlayOutline,
+  IoTimerOutline,
+  IoEyeOutline,
+  IoNotificationsOutline,
+  IoPauseOutline,
+  IoTimerOutline,
+];
 
 export default function HowItWorks() {
   return (
-    <main className='mx-auto w-xl'>
-      <section className='flex h-screen flex-col justify-center space-y-4'>
-        <h1 className='text-3xl font-bold'>How Desk Detour Works?</h1>
-        <div className='space-y-2'>
-          {HOW_IT_WORKS.map((el, index) => (
-            <div className='flex gap-4'>
-              <span className='bg-green flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full font-semibold text-white'>
-                {index + 1}
+    <main className='page scroll-page'>
+      <header className='page-header page-header-copy'>
+        <div>
+          <p className='eyebrow'>The system</p>
+          <h1>A healthier rhythm, on autopilot.</h1>
+          <p className='header-description'>
+            Desk Detour runs quietly in the background and brings you back to
+            the right habit at the right time.
+          </p>
+        </div>
+      </header>
+
+      <section className='steps-grid'>
+        {HOW_IT_WORKS.map((item, index) => {
+          const Icon = icons[index];
+          return (
+            <article className='step-card' key={item.title}>
+              <span className='step-icon'>
+                <Icon aria-hidden='true' />
               </span>
-              <div>
-                <h2 className='font-semibold'>{el.title}</h2>
-                <p className='opacity-80'>{el.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className='flex items-center gap-1 text-sm'>
-          <p>
-            Made by{' '}
-            <a
-              href='https://x.com/iamaamins'
-              target='_blank'
-              className='text-yellow underline'
-            >
-              @iamaamins
-            </a>
-          </p>
-          <span className='bg-green h-1.5 w-1.5 rounded-full'></span>
-          <p>
-            <a
-              href='https://deskdetour.com/subscribe'
-              target='_blank'
-              className='text-yellow underline'
-            >
-              Subscribe
-            </a>{' '}
-            for updates on the next release
-          </p>
-        </div>
+              <span className='step-number'>0{index + 1}</span>
+              <h2>{item.title}</h2>
+              <p>{item.description}</p>
+            </article>
+          );
+        })}
       </section>
+
+      <footer className='page-footer'>
+        <p>
+          Made thoughtfully by{' '}
+          <a href='https://x.com/iamaamins' target='_blank' rel='noreferrer'>
+            @iamaamins <IoArrowUpOutline aria-hidden='true' />
+          </a>
+        </p>
+        <a
+          href='https://deskdetour.com/subscribe'
+          target='_blank'
+          rel='noreferrer'
+        >
+          Get product updates <IoArrowUpOutline aria-hidden='true' />
+        </a>
+      </footer>
     </main>
   );
 }

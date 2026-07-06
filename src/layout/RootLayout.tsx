@@ -3,9 +3,11 @@ import Navigation from './Navigation';
 
 export default function RootLayout() {
   return (
-    <>
+    <div className='app-shell'>
       <Navigation />
-      <Outlet />
-    </>
+      <div className='page-shell'>
+        <Outlet />
+      </div>
+    </div>
   );
 }

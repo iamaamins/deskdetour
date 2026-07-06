@@ -1,15 +1,21 @@
 import { useEffect, useState } from 'react';
 import { TimerState } from '../types';
-import { RiResetLeftLine } from 'react-icons/ri';
 import {
+  IoArrowForwardOutline,
   IoDesktopOutline,
   IoEyeOutline,
+  IoFitnessOutline,
   IoPauseOutline,
   IoPlayOutline,
+  IoRefreshOutline,
 } from 'react-icons/io5';
 import { Link } from 'react-router';
-import { MdOutlineSportsGymnastics } from 'react-icons/md';
-import { BiCoffeeTogo } from 'react-icons/bi';
+
+const PHASE_LENGTHS = {
+  work: 15 * 60,
+  view: 20,
+  move: 2 * 60,
+} as const;
 
 export default function Home() {
   const [timer, setTimer] = useState<TimerState | null>(null);
@@ -23,106 +29,173 @@ export default function Home() {
   const isWorkTimeComingUp = (timer: TimerState) =>
     (timer.isViewTime || timer.isMoveTime) && timer.sessionCount < 2;
 
-  const isMoveTimeComingUp = (timer: TimerState) =>
-    timer.isViewTime && timer.sessionCount >= 2;
-
   const remainingSessionCount = (timer: TimerState) => 2 - timer.sessionCount;
 
+  if (!timer) {
+    return (
+      <main className='page home-page'>
+        <div className='loading-state'>
+          <span className='loading-pulse' />
+          <p>Starting your timer…</p>
+        </div>
+      </main>
+    );
+  }
+
+  const phase = timer.isViewTime
+    ? {
+        key: 'view' as const,
+        label: 'View break',
+        helper: 'Look at something 20 feet away',
+        icon: IoEyeOutline,
+      }
+    : timer.isMoveTime
+      ? {
+          key: 'move' as const,
+          label: 'Move break',
+          helper: 'Stand up and move a little',
+          icon: IoFitnessOutline,
+        }
+      : {
+          key: 'work' as const,
+          label: 'Focus time',
+          helper: 'Stay with the task at hand',
+          icon: IoDesktopOutline,
+        };
+
+  const PhaseIcon = phase.icon;
+  const progress = Math.max(
+    0,
+    Math.min(1, timer.timeRemaining / PHASE_LENGTHS[phase.key]),
+  );
+  const progressOffset = 603.19 * (1 - progress);
+  const minutes = Math.floor(timer.timeRemaining / 60);
+  const seconds = Math.floor(timer.timeRemaining % 60)
+    .toString()
+    .padStart(2, '0');
+  const isPaused = timer.isPaused || timer.isIdle;
+  const nextLabel = isViewTimeComingUp(timer)
+    ? 'View break'
+    : isWorkTimeComingUp(timer)
+      ? 'Focus time'
+      : 'Move break';
+  const NextIcon = isViewTimeComingUp(timer)
+    ? IoEyeOutline
+    : isWorkTimeComingUp(timer)
+      ? IoDesktopOutline
+      : IoFitnessOutline;
+
   return (
-    <main className='mx-auto w-xl'>
-      {timer && (
-        <section className='flex h-screen flex-col items-center justify-center gap-2'>
-          <p className='text-2xl font-medium'>
-            {timer.isPaused || timer.isIdle
-              ? 'Paused'
-              : timer.isWorkTime
-                ? 'Work'
-                : timer.isViewTime
-                  ? 'View'
-                  : timer.isMoveTime && 'Move'}
-          </p>
-          <div className='flex items-center text-9xl font-bold'>
-            <p>{Math.floor(timer.timeRemaining / 60)}</p>
-            <span>:</span>
-            <p>
-              {Math.floor(timer.timeRemaining % 60)
-                .toString()
-                .padStart(2, '0')}
-            </p>
+    <main className='page home-page'>
+      <header className='page-header'>
+        <div>
+          <p className='eyebrow'>Today's rhythm</p>
+          <h1>Take care of your health.</h1>
+        </div>
+        <div className={`live-badge${isPaused ? 'is-paused' : ''}`}>
+          <span />
+          {isPaused ? (timer.isIdle ? 'Paused · Idle' : 'Paused') : 'Active'}
+        </div>
+      </header>
+
+      <section className='dashboard'>
+        <div className='timer-card'>
+          <div className='phase-label'>
+            <span className={`phase-icon phase-${phase.key}`}>
+              <PhaseIcon aria-hidden='true' />
+            </span>
+            <div>
+              <strong>{isPaused ? 'Timer paused' : phase.label}</strong>
+              <span>{phase.helper}</span>
+            </div>
           </div>
-          <div className='flex items-center gap-2'>
+
+          <div className='timer-ring'>
+            <svg viewBox='0 0 216 216' aria-hidden='true'>
+              <circle className='timer-track' cx='108' cy='108' r='96' />
+              <circle
+                className={`timer-progress timer-progress-${phase.key}`}
+                cx='108'
+                cy='108'
+                r='96'
+                style={{ strokeDashoffset: progressOffset }}
+              />
+            </svg>
+            <div className='timer-value' aria-label={`${minutes}:${seconds}`}>
+              <span>
+                {minutes}:{seconds}
+              </span>
+              <small>remaining</small>
+            </div>
+          </div>
+
+          <div className='timer-actions'>
             <button
               onClick={() => window.timer.reset()}
-              className='bg-slight-gray flex cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2'
+              className='button button-secondary'
             >
-              <RiResetLeftLine /> Reset
+              <IoRefreshOutline aria-hidden='true' /> Reset
             </button>
-            {timer.isPaused && !timer.isIdle ? (
+            {isPaused && !timer.isIdle ? (
               <button
                 onClick={() => window.timer.resume()}
-                className='bg-yellow text-white-black-scheme flex cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2'
+                className='button button-primary'
               >
-                <IoPlayOutline /> Resume
+                <IoPlayOutline aria-hidden='true' /> Resume
               </button>
             ) : (
               <button
                 onClick={() => window.timer.pause()}
-                className='bg-slight-gray flex cursor-pointer items-center justify-center gap-2 rounded-full px-3 py-2'
+                className='button button-primary'
+                disabled={timer.isIdle}
               >
-                <IoPauseOutline /> Pause
+                <IoPauseOutline aria-hidden='true' /> Pause
               </button>
             )}
           </div>
-          <div className='border-slight-gray mt-2 space-y-2 rounded-xl border p-4'>
-            <p className='text-lg font-medium'>Coming up:</p>
-            <div className='flex items-center gap-4'>
-              <p className='flex items-center gap-1.5'>
-                <span className='border-green bg-green/50 flex h-6 w-6 items-center justify-center rounded-md border p-1'>
-                  {isViewTimeComingUp(timer) ? (
-                    <IoEyeOutline />
-                  ) : isWorkTimeComingUp(timer) ? (
-                    <IoDesktopOutline />
-                  ) : (
-                    isMoveTimeComingUp(timer) && <MdOutlineSportsGymnastics />
-                  )}
-                </span>
-                <span>
-                  {isViewTimeComingUp(timer)
-                    ? 'View'
-                    : isWorkTimeComingUp(timer)
-                      ? 'Work'
-                      : isMoveTimeComingUp(timer) && 'Move'}{' '}
-                  session
-                </span>
-              </p>
-              <p className='flex items-center gap-1.5'>
-                <span className='border-green bg-green/50 flex h-6 w-6 items-center justify-center rounded-md border p-1 font-bold'>
-                  {remainingSessionCount(timer)}
-                </span>
-                <span>
-                  {remainingSessionCount(timer) > 1 ? 'sessions' : 'session'}{' '}
-                  before{' '}
-                  <Link className='text-yellow underline' to='/exercises'>
-                    move
-                  </Link>
-                </span>
-              </p>
+        </div>
+
+        <div className='dashboard-side'>
+          <article className='info-card next-card'>
+            <p className='card-label'>Coming up</p>
+            <div className='next-session'>
+              <span className='next-icon'>
+                <NextIcon aria-hidden='true' />
+              </span>
+              <div>
+                <strong>{nextLabel}</strong>
+                <span>After this timer</span>
+              </div>
             </div>
-          </div>
-        </section>
-      )}
-      <Link
-        target='_blank'
-        to='https://deskdetour.com/buy-me-a-coffee'
-        className='group text-white-black-scheme bg-yellow border-yellow absolute right-4 bottom-4 flex h-8 w-8 items-center gap-1 overflow-hidden rounded-full border px-[8px] transition-all duration-300 hover:w-[149.5px]'
-      >
-        <span>
-          <BiCoffeeTogo />
-        </span>
-        <span className='text-nowrap opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-          Buy me a coffee
-        </span>
-      </Link>
+          </article>
+
+          <article className='info-card cycle-card'>
+            <p className='card-label'>Movement cycle</p>
+            <div
+              className='cycle-progress'
+              aria-label='Work sessions completed'
+            >
+              {[0, 1].map((session) => (
+                <span
+                  key={session}
+                  className={session < timer.sessionCount ? 'complete' : ''}
+                />
+              ))}
+              <span className='cycle-finish'>
+                <IoFitnessOutline aria-hidden='true' />
+              </span>
+            </div>
+            <p>
+              <strong>{Math.max(0, remainingSessionCount(timer))}</strong>{' '}
+              {remainingSessionCount(timer) === 1 ? 'session' : 'sessions'}{' '}
+              until your movement break.
+            </p>
+            <Link to='/exercises' className='text-link'>
+              Plan your break <IoArrowForwardOutline aria-hidden='true' />
+            </Link>
+          </article>
+        </div>
+      </section>
     </main>
   );
 }
