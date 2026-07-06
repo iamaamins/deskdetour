@@ -1,7 +1,8 @@
 import { NOTIFICATION } from './lib/notification';
 
 export type TimerState = {
-  isPaused: boolean;
+  isIdle: boolean;
+  pauseUntil: number | null;
   isWorkTime: boolean;
   isViewTime: boolean;
   isMoveTime: boolean;
@@ -9,11 +10,15 @@ export type TimerState = {
   sessionCount: number;
 };
 
+export type PauseDuration = 45 | 120;
+
 declare global {
   interface Window {
     timer: {
-      onUpdate: (callback: (state: TimerState) => void) => void;
-      reset: () => void;
+      onUpdate: (callback: (state: TimerState) => void) => () => void;
+      reset: () => Promise<void>;
+      pause: (minutes: PauseDuration) => Promise<void>;
+      resume: () => Promise<void>;
     };
   }
 }

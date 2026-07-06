@@ -1,9 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { TimerState } from './types';
+import { PauseDuration, TimerState } from './types';
 
 contextBridge.exposeInMainWorld('timer', {
   onUpdate: (callback: (state: TimerState) => void) => {
-    ipcRenderer.on('timer:update', (_, state: TimerState) => callback(state));
+    const listener = (_: Electron.IpcRendererEvent, state: TimerState) =>
+      callback(state);
+    ipcRenderer.on('timer:update', listener);
+    return () => ipcRenderer.removeListener('timer:update', listener);
   },
   reset: () => ipcRenderer.invoke('timer:reset'),
+  pause: (minutes: PauseDuration) => ipcRenderer.invoke('timer:pause', minutes),
+  resume: () => ipcRenderer.invoke('timer:resume'),
 });
