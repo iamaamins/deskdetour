@@ -10,12 +10,6 @@ export type TimerState = {
   sessionCount: number;
 };
 
-export type LaunchAtLoginSettings = {
-  openAtLogin: boolean;
-  isSupported: boolean;
-  status?: 'not-registered' | 'enabled' | 'requires-approval' | 'not-found';
-};
-
 declare global {
   interface Window {
     timer: {
@@ -24,12 +18,6 @@ declare global {
       reset: () => Promise<void>;
       pause: () => Promise<void>;
       resume: () => Promise<void>;
-    };
-    settings: {
-      getLaunchAtLogin: () => Promise<LaunchAtLoginSettings>;
-      setLaunchAtLogin: (
-        openAtLogin: boolean,
-      ) => Promise<LaunchAtLoginSettings>;
     };
   }
 }

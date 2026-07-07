@@ -7,7 +7,6 @@ import {
   createTray,
   createApplicationMenu,
 } from './lib/system';
-import { handleSettingsEvents } from './lib/settings';
 
 if (started) app.quit();
 
@@ -27,5 +26,4 @@ app.on('ready', async () => {
     if (isMac) app.dock?.hide();
   });
   handleEvents(app, mainWindow, tray, updateTrayMenu);
-  handleSettingsEvents(app, mainWindow);
 });
