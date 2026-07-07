@@ -18,6 +18,11 @@ import { getTrayIconPath, openAllowedExternalUrl } from './utils';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
+export type TrayController = {
+  tray: Tray;
+  updateTrayMenu: () => void;
+};
+
 function isAppUrl(url: string) {
   try {
     const parsedUrl = new URL(url);
@@ -65,10 +70,13 @@ export function createMainWindow() {
   return mainWindow;
 }
 
-export function createTray(app: App, mainWindow: BrowserWindow) {
+export function createTray(
+  app: App,
+  mainWindow: BrowserWindow,
+): TrayController {
   const tray = new Tray(getTrayIconPath(app));
 
-  function buildTrayMenu() {
+  const updateTrayMenu = () => {
     const isPaused = isTimerPaused();
     const contextMenu = Menu.buildFromTemplate([
       {
@@ -83,7 +91,7 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
         label: 'Reset Timer',
         click: () => {
           resetTimer();
-          buildTrayMenu();
+          updateTrayMenu();
         },
       },
       {
@@ -91,7 +99,7 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
         visible: !isPaused,
         click: () => {
           pauseTimer();
-          buildTrayMenu();
+          updateTrayMenu();
         },
       },
       {
@@ -99,7 +107,7 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
         visible: isPaused,
         click: () => {
           resumeTimer();
-          buildTrayMenu();
+          updateTrayMenu();
         },
       },
       { type: 'separator' },
@@ -115,12 +123,12 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
     ]);
 
     tray.setContextMenu(contextMenu);
-  }
+  };
 
-  buildTrayMenu();
+  updateTrayMenu();
   tray.setToolTip(app.name);
 
-  return tray;
+  return { tray, updateTrayMenu };
 }
 
 export function createApplicationMenu(app: App) {

@@ -148,7 +148,12 @@ export function stopTimers() {
   resetTimer();
 }
 
-export function handleEvents(app: App, mainWindow: BrowserWindow, tray: Tray) {
+export function handleEvents(
+  app: App,
+  mainWindow: BrowserWindow,
+  tray: Tray,
+  updateTrayMenu: () => void,
+) {
   ipcMain.handle('timer:get-state', (event) => {
     assertTrustedSender(event, mainWindow);
     return getTimerState();
@@ -156,14 +161,17 @@ export function handleEvents(app: App, mainWindow: BrowserWindow, tray: Tray) {
   ipcMain.handle('timer:reset', (event) => {
     assertTrustedSender(event, mainWindow);
     resetTimer();
+    updateTrayMenu();
   });
   ipcMain.handle('timer:pause', (event) => {
     assertTrustedSender(event, mainWindow);
     pauseTimer();
+    updateTrayMenu();
   });
   ipcMain.handle('timer:resume', (event) => {
     assertTrustedSender(event, mainWindow);
     resumeTimer();
+    updateTrayMenu();
   });
   powerMonitor.on('lock-screen', () => stopTimers());
   powerMonitor.on('shutdown', () => stopTimers());

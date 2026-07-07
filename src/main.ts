@@ -14,7 +14,7 @@ if (started) app.quit();
 app.on('ready', async () => {
   // System functions
   const mainWindow = createMainWindow();
-  const tray = createTray(app, mainWindow);
+  const { tray, updateTrayMenu } = createTray(app, mainWindow);
   createApplicationMenu(app);
 
   // Start timers
@@ -26,6 +26,6 @@ app.on('ready', async () => {
     mainWindow.hide();
     if (isMac) app.dock?.hide();
   });
-  handleEvents(app, mainWindow, tray);
+  handleEvents(app, mainWindow, tray, updateTrayMenu);
   handleSettingsEvents(app, mainWindow);
 });
