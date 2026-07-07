@@ -3,13 +3,11 @@ import {
   IoEyeOutline,
   IoNotificationsOutline,
   IoPauseOutline,
-  IoPlayOutline,
   IoTimerOutline,
 } from 'react-icons/io5';
 import { HOW_IT_WORKS } from '../data/HOW_IT_WORKS';
 
 const icons = [
-  IoPlayOutline,
   IoTimerOutline,
   IoEyeOutline,
   IoNotificationsOutline,

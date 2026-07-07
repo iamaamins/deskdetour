@@ -2,7 +2,6 @@ import { App, Notification, shell } from 'electron';
 import path from 'node:path';
 import { isDev, isMac, isWin } from './config';
 import { execFile } from 'node:child_process';
-import { NotificationBody, NotificationTitle } from '../../src/types';
 
 const allowedExternalHosts = new Set([
   'deskdetour.com',
@@ -11,7 +10,7 @@ const allowedExternalHosts = new Set([
   'youtu.be',
   'youtube.com',
   'www.youtube.com',
-]) as ReadonlySet<string>;
+]);
 
 export function getTrayIconPath(app: App) {
   const icon = isMac ? 'trayIconTemplate.png' : 'icon.ico';
@@ -78,7 +77,7 @@ export function playNotificationSound(
   }
 }
 
-export const notify = (title: NotificationTitle, body: NotificationBody) =>
+export const notify = (title: string, body: string) =>
   new Notification({ title, body, silent: true }).show();
 
 export const formatTime = (time: number) => time.toString().padStart(2, '0');

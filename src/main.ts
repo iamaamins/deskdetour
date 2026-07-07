@@ -10,16 +10,13 @@ import {
 
 if (started) app.quit();
 
-app.on('ready', async () => {
-  // System functions
+app.on('ready', () => {
   const mainWindow = createMainWindow();
   const { tray, updateTrayMenu } = createTray(app, mainWindow);
   createApplicationMenu(app);
 
-  // Start timers
   startTimers(app, mainWindow, tray);
 
-  // Event listeners
   mainWindow.on('close', (e) => {
     e.preventDefault();
     mainWindow.hide();

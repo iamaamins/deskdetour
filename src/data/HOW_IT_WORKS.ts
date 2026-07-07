@@ -1,9 +1,5 @@
 export const HOW_IT_WORKS = [
   {
-    title: 'Automatic Start',
-    description: 'Desk Detour launches at login and runs in the background.',
-  },
-  {
     title: 'Work Session',
     description: 'Starts with a 15-minute work session.',
   },

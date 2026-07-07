@@ -18,11 +18,6 @@ import { getTrayIconPath, openAllowedExternalUrl } from './utils';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
-export type TrayController = {
-  tray: Tray;
-  updateTrayMenu: () => void;
-};
-
 function isAppUrl(url: string) {
   try {
     const parsedUrl = new URL(url);
@@ -73,7 +68,7 @@ export function createMainWindow() {
 export function createTray(
   app: App,
   mainWindow: BrowserWindow,
-): TrayController {
+) {
   const tray = new Tray(getTrayIconPath(app));
 
   const updateTrayMenu = () => {
@@ -190,8 +185,7 @@ export function createApplicationMenu(app: App) {
       submenu: [
         {
           label: 'Learn More',
-          click: async () =>
-            await openAllowedExternalUrl('https://www.deskdetour.com'),
+          click: () => openAllowedExternalUrl('https://www.deskdetour.com'),
         },
       ],
     },

@@ -8,7 +8,7 @@ import {
 } from './config';
 import { formatTime, notify, playNotificationSound } from './utils';
 import { NOTIFICATION } from './notification';
-import { TimerState } from '../types';
+import type { TimerState } from '../types';
 import { assertTrustedSender } from './ipc';
 
 type PauseReason = 'manual' | 'idle' | null;
@@ -99,7 +99,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
             playNotificationSound(app, 'break-over');
             state.timeRemaining = WORK_TIME;
             state.isWorkTime = true;
-          } else if (state.sessionCount >= SESSION_THRESHOLD) {
+          } else {
             notify(NOTIFICATION.move.title, NOTIFICATION.move.body);
             playNotificationSound(app, 'move');
             state.timeRemaining = MOVE_TIME;
@@ -171,7 +171,7 @@ export function handleEvents(
     resumeTimer();
     updateTrayMenu();
   });
-  powerMonitor.on('lock-screen', () => stopTimers());
-  powerMonitor.on('shutdown', () => stopTimers());
+  powerMonitor.on('lock-screen', stopTimers);
+  powerMonitor.on('shutdown', stopTimers);
   powerMonitor.on('unlock-screen', () => startTimers(app, mainWindow, tray));
 }

@@ -1,4 +1,4 @@
-import { BrowserWindow, IpcMainInvokeEvent } from 'electron';
+import type { BrowserWindow, IpcMainInvokeEvent } from 'electron';
 
 export function assertTrustedSender(
   event: IpcMainInvokeEvent,

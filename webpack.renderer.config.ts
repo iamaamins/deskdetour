@@ -11,7 +11,6 @@ rules.push(
       { loader: 'postcss-loader' },
     ],
   },
-  { test: /\.(png|jpg)$/i, type: 'asset/resource' },
 );
 
 export const rendererConfig: Configuration = {
