@@ -93,7 +93,7 @@ export default function Home() {
             Today's rhythm
           </p>
           <h1 className='text-[27px] leading-[1.15] font-[650] tracking-[-0.035em]'>
-            Take care of your health.
+            Build healthy habits.
           </h1>
         </div>
         <div
