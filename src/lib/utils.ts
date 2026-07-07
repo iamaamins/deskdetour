@@ -1,7 +1,7 @@
 import { App, Notification, shell } from 'electron';
 import path from 'node:path';
 import { isDev, isMac, isWin } from './config';
-import { exec } from 'child_process';
+import { execFile } from 'node:child_process';
 import { NotificationBody, NotificationTitle } from '../../src/types';
 
 const allowedExternalHosts = new Set([
@@ -45,12 +45,27 @@ export function playNotificationSound(
     ? path.join(app.getAppPath(), 'src', 'assets', filename)
     : path.join(process.resourcesPath, 'assets', filename);
 
-  if (isMac) exec(`afplay "${filePath}"`);
+  if (isMac) {
+    execFile('/usr/bin/afplay', [filePath], (error) => {
+      if (error) console.error('Error playing notification sound');
+    });
+  }
 
-  if (isWin)
-    exec(
-      `powershell -c (New-Object Media.SoundPlayer '${filePath}').PlaySync()`,
+  if (isWin) {
+    execFile(
+      'powershell.exe',
+      [
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        '(New-Object Media.SoundPlayer $args[0]).PlaySync()',
+        filePath,
+      ],
+      (error) => {
+        if (error) console.error('Error playing notification sound');
+      },
     );
+  }
 }
 
 export const notify = (title: NotificationTitle, body: NotificationBody) =>
