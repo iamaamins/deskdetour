@@ -3,7 +3,6 @@ import {
   BrowserWindow,
   Menu,
   Tray,
-  shell,
   MenuItemConstructorOptions,
 } from 'electron';
 import {
@@ -13,11 +12,25 @@ import {
   stopTimers,
   isTimerPaused,
 } from './timer';
-import { isMac } from './config';
-import { getTrayIconPath } from './utils';
+import { isDev, isMac } from './config';
+import { getTrayIconPath, openAllowedExternalUrl } from './utils';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+
+function isAppUrl(url: string) {
+  try {
+    const parsedUrl = new URL(url);
+    const appUrl = new URL(MAIN_WINDOW_WEBPACK_ENTRY);
+    return (
+      parsedUrl.protocol === appUrl.protocol &&
+      parsedUrl.origin === appUrl.origin &&
+      parsedUrl.pathname === appUrl.pathname
+    );
+  } catch {
+    return url === MAIN_WINDOW_WEBPACK_ENTRY;
+  }
+}
 
 export function createMainWindow() {
   const mainWindow = new BrowserWindow({
@@ -25,7 +38,12 @@ export function createMainWindow() {
     height: 600,
     resizable: false,
     webPreferences: {
-      devTools: false,
+      devTools: isDev,
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   });
@@ -33,8 +51,15 @@ export function createMainWindow() {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url);
+    openAllowedExternalUrl(details.url);
     return { action: 'deny' };
+  });
+
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    if (isAppUrl(url)) return;
+
+    event.preventDefault();
+    openAllowedExternalUrl(url);
   });
 
   return mainWindow;
@@ -158,7 +183,7 @@ export function createApplicationMenu(app: App) {
         {
           label: 'Learn More',
           click: async () =>
-            await shell.openExternal('https://www.deskdetour.com'),
+            await openAllowedExternalUrl('https://www.deskdetour.com'),
         },
       ],
     },

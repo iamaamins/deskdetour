@@ -1,8 +1,17 @@
-import { App, Notification } from 'electron';
+import { App, Notification, shell } from 'electron';
 import path from 'node:path';
 import { isDev, isMac, isWin } from './config';
 import { exec } from 'child_process';
 import { NotificationBody, NotificationTitle } from '../../src/types';
+
+const allowedExternalHosts = new Set([
+  'deskdetour.com',
+  'www.deskdetour.com',
+  'x.com',
+  'youtu.be',
+  'youtube.com',
+  'www.youtube.com',
+]);
 
 export function getTrayIconPath(app: App) {
   const icon = isMac ? 'trayIconTemplate.png' : 'icon.ico';
@@ -10,6 +19,21 @@ export function getTrayIconPath(app: App) {
   return isDev
     ? path.join(app.getAppPath(), 'src', 'assets', icon)
     : path.join(process.resourcesPath, 'assets', icon);
+}
+
+export async function openAllowedExternalUrl(url: string) {
+  try {
+    const parsedUrl = new URL(url);
+
+    if (
+      parsedUrl.protocol === 'https:' &&
+      allowedExternalHosts.has(parsedUrl.hostname)
+    ) {
+      await shell.openExternal(url);
+    }
+  } catch {
+    console.error(`URL not allowed to open: ${url}`);
+  }
 }
 
 export function playNotificationSound(
