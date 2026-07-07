@@ -27,5 +27,5 @@ app.on('ready', async () => {
     if (isMac) app.dock?.hide();
   });
   handleEvents(app, mainWindow, tray);
-  handleSettingsEvents(app);
+  handleSettingsEvents(app, mainWindow);
 });

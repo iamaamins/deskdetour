@@ -1,6 +1,7 @@
-import { App, ipcMain } from 'electron';
+import { App, BrowserWindow, ipcMain } from 'electron';
 import { isMac, isWin } from './config';
 import { LaunchAtLoginSettings } from '../types';
+import { assertTrustedSender } from './ipc';
 
 function getLaunchAtLoginSettings(app: App): LaunchAtLoginSettings {
   if (!isMac && !isWin) {
@@ -16,14 +17,16 @@ function getLaunchAtLoginSettings(app: App): LaunchAtLoginSettings {
   };
 }
 
-export function handleSettingsEvents(app: App) {
-  ipcMain.handle('settings:get-launch-at-login', () =>
-    getLaunchAtLoginSettings(app),
-  );
+export function handleSettingsEvents(app: App, mainWindow: BrowserWindow) {
+  ipcMain.handle('settings:get-launch-at-login', (event) => {
+    assertTrustedSender(event, mainWindow);
+    return getLaunchAtLoginSettings(app);
+  });
 
   ipcMain.handle(
     'settings:set-launch-at-login',
-    (_event, openAtLogin: boolean) => {
+    (event, openAtLogin: boolean) => {
+      assertTrustedSender(event, mainWindow);
       app.setLoginItemSettings({ openAtLogin });
       return getLaunchAtLoginSettings(app);
     },

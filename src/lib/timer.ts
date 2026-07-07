@@ -9,6 +9,7 @@ import {
 import { formatTime, notify, playNotificationSound } from './utils';
 import { NOTIFICATION } from './notification';
 import { TimerState } from '../types';
+import { assertTrustedSender } from './ipc';
 
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
@@ -134,11 +135,16 @@ export function stopTimers() {
 }
 
 export function handleEvents(app: App, mainWindow: BrowserWindow, tray: Tray) {
-  ipcMain.handle('timer:reset', () => resetTimer());
-  ipcMain.handle('timer:pause', () => {
+  ipcMain.handle('timer:reset', (event) => {
+    assertTrustedSender(event, mainWindow);
+    resetTimer();
+  });
+  ipcMain.handle('timer:pause', (event) => {
+    assertTrustedSender(event, mainWindow);
     pauseTimer();
   });
-  ipcMain.handle('timer:resume', () => {
+  ipcMain.handle('timer:resume', (event) => {
+    assertTrustedSender(event, mainWindow);
     resumeTimer();
   });
   powerMonitor.on('lock-screen', () => stopTimers());
