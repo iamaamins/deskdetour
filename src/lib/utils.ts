@@ -11,7 +11,7 @@ const allowedExternalHosts = new Set([
   'youtu.be',
   'youtube.com',
   'www.youtube.com',
-]);
+]) as ReadonlySet<string>;
 
 export function getTrayIconPath(app: App) {
   const icon = isMac ? 'trayIconTemplate.png' : 'icon.ico';
@@ -22,17 +22,27 @@ export function getTrayIconPath(app: App) {
 }
 
 export async function openAllowedExternalUrl(url: string) {
-  try {
-    const parsedUrl = new URL(url);
+  let parsedUrl: URL;
 
-    if (
-      parsedUrl.protocol === 'https:' &&
-      allowedExternalHosts.has(parsedUrl.hostname)
-    ) {
-      await shell.openExternal(url);
-    }
-  } catch {
-    console.error(`URL not allowed to open: ${url}`);
+  try {
+    parsedUrl = new URL(url);
+  } catch (error) {
+    console.warn('Blocked invalid external URL.', { url, error });
+    return;
+  }
+
+  if (
+    parsedUrl.protocol !== 'https:' ||
+    !allowedExternalHosts.has(parsedUrl.hostname)
+  ) {
+    console.warn('Blocked disallowed external URL.', { url });
+    return;
+  }
+
+  try {
+    await shell.openExternal(parsedUrl.toString());
+  } catch (error) {
+    console.error('Failed to open external URL.', { url, error });
   }
 }
 
@@ -47,7 +57,7 @@ export function playNotificationSound(
 
   if (isMac) {
     execFile('/usr/bin/afplay', [filePath], (error) => {
-      if (error) console.error('Error playing notification sound');
+      if (error) console.error('Error playing notification sound.', error);
     });
   }
 
@@ -62,7 +72,7 @@ export function playNotificationSound(
         filePath,
       ],
       (error) => {
-        if (error) console.error('Error playing notification sound');
+        if (error) console.error('Error playing notification sound.', error);
       },
     );
   }

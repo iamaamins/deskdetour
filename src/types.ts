@@ -20,6 +20,7 @@ declare global {
   interface Window {
     timer: {
       onUpdate: (callback: (state: TimerState) => void) => () => void;
+      getState: () => Promise<TimerState>;
       reset: () => Promise<void>;
       pause: () => Promise<void>;
       resume: () => Promise<void>;

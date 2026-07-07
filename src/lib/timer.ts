@@ -11,8 +11,12 @@ import { NOTIFICATION } from './notification';
 import { TimerState } from '../types';
 import { assertTrustedSender } from './ipc';
 
+type PauseReason = 'manual' | 'idle' | null;
+
 let mainTimer: NodeJS.Timeout | null = null;
 let idleTimer: NodeJS.Timeout | null = null;
+let lastTrayTitle: string | null = null;
+let lastStateSnapshot: string | null = null;
 
 const state: TimerState = {
   isIdle: false,
@@ -24,27 +28,41 @@ const state: TimerState = {
   timeRemaining: WORK_TIME,
 };
 
+const getTimerState = () => ({ ...state });
+
+const getPauseReason = (): PauseReason =>
+  state.isPaused ? 'manual' : state.isIdle ? 'idle' : null;
+
+function getTrayTitle(pauseReason: PauseReason) {
+  if (pauseReason === 'manual') return 'Paused';
+  if (pauseReason === 'idle') return 'Idle';
+
+  const minutes = Math.floor(state.timeRemaining / 60);
+  const seconds = Math.floor(state.timeRemaining % 60);
+  const phase = state.isWorkTime ? 'Work' : state.isViewTime ? 'View' : 'Move';
+
+  return `${phase}: ${formatTime(minutes)}:${formatTime(seconds)}`;
+}
+
 function updateDisplays(
   mainWindow: BrowserWindow,
   tray: Tray,
-  pauseReason: 'manual' | 'idle' | null,
+  pauseReason: PauseReason,
 ) {
-  if (pauseReason === 'manual') {
-    tray.setTitle('Paused');
-  } else if (pauseReason === 'idle') {
-    tray.setTitle('Paused: Idle');
-  } else {
-    const minutes = Math.floor(state.timeRemaining / 60);
-    const seconds = Math.floor(state.timeRemaining % 60);
+  const trayTitle = getTrayTitle(pauseReason);
 
-    tray.setTitle(
-      `${state.isWorkTime ? 'Work' : state.isViewTime ? 'View' : state.isMoveTime && 'Move'}: ${formatTime(
-        minutes,
-      )}:${formatTime(seconds)}`,
-    );
+  if (trayTitle !== lastTrayTitle) {
+    tray.setTitle(trayTitle);
+    lastTrayTitle = trayTitle;
   }
 
-  mainWindow.webContents.send('timer:update', state);
+  const nextState = getTimerState();
+  const nextStateSnapshot = JSON.stringify(nextState);
+
+  if (nextStateSnapshot !== lastStateSnapshot) {
+    mainWindow.webContents.send('timer:update', nextState);
+    lastStateSnapshot = nextStateSnapshot;
+  }
 }
 
 export function isTimerPaused() {
@@ -64,11 +82,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
   if (idleTimer) clearInterval(idleTimer);
 
   mainTimer = setInterval(() => {
-    const pauseReason = state.isPaused
-      ? 'manual'
-      : state.isIdle
-        ? 'idle'
-        : null;
+    const pauseReason = getPauseReason();
 
     if (!pauseReason) {
       state.timeRemaining--;
@@ -135,6 +149,10 @@ export function stopTimers() {
 }
 
 export function handleEvents(app: App, mainWindow: BrowserWindow, tray: Tray) {
+  ipcMain.handle('timer:get-state', (event) => {
+    assertTrustedSender(event, mainWindow);
+    return getTimerState();
+  });
   ipcMain.handle('timer:reset', (event) => {
     assertTrustedSender(event, mainWindow);
     resetTimer();
