@@ -3,6 +3,7 @@ import {
   IoHeartOutline,
   IoHomeOutline,
   IoInformationCircleOutline,
+  IoSettingsOutline,
 } from 'react-icons/io5';
 import { NavLink } from 'react-router';
 
@@ -18,6 +19,12 @@ const navItems = [
     to: '/how-it-works',
     label: 'How it works',
     icon: IoInformationCircleOutline,
+    end: false,
+  },
+  {
+    to: '/settings',
+    label: 'Settings',
+    icon: IoSettingsOutline,
     end: false,
   },
 ] as const;

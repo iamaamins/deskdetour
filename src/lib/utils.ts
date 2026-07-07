@@ -1,7 +1,6 @@
 import { App, Notification } from 'electron';
 import path from 'node:path';
 import { isDev, isMac, isWin } from './config';
-import AutoLaunch from 'auto-launch';
 import { exec } from 'child_process';
 import { NotificationBody, NotificationTitle } from '../../src/types';
 
@@ -11,17 +10,6 @@ export function getTrayIconPath(app: App) {
   return isDev
     ? path.join(app.getAppPath(), 'src', 'assets', icon)
     : path.join(process.resourcesPath, 'assets', icon);
-}
-
-export async function setApplicationAsLoginItem(app: App) {
-  const autoLauncher = new AutoLaunch({ name: app.name });
-
-  try {
-    const isEnabled = await autoLauncher.isEnabled();
-    if (!isEnabled) await autoLauncher.enable();
-  } catch (err) {
-    console.error('Error enabling auto launch');
-  }
 }
 
 export function playNotificationSound(
