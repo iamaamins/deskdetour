@@ -36,7 +36,7 @@ const config: ForgeConfig = {
         entryPoints: [
           {
             html: './src/index.html',
-            js: './src/renderer.ts',
+            js: './src/main.tsx',
             name: 'main_window',
             preload: {
               js: './src/preload.ts',

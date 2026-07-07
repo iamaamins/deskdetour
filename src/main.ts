@@ -25,7 +25,7 @@ app.on('ready', async () => {
   mainWindow.on('close', (e) => {
     e.preventDefault();
     mainWindow.hide();
-    if (isMac) app.dock.hide();
+    if (isMac) app.dock?.hide();
   });
   handleEvents(app, mainWindow, tray);
 });

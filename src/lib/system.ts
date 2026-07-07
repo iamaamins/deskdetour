@@ -50,7 +50,7 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
         label: `Open ${app.name}`,
         click: () => {
           mainWindow.show();
-          if (isMac) app.dock.show();
+          if (isMac) app.dock?.show();
         },
       },
       { type: 'separator' },
