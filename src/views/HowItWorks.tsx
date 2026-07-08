@@ -17,20 +17,18 @@ const icons = [
 
 export default function HowItWorks() {
   return (
-    <main className='h-full w-full overflow-y-auto px-9 pt-[34px] pb-7 [scrollbar-color:#c9d0ca_transparent] [scrollbar-width:thin]'>
-      <header className='flex min-h-[67px] max-w-[510px] items-start justify-between'>
-        <div>
-          <p className='mb-1 text-[11px] font-[750] tracking-[0.13em] text-[var(--primary)] uppercase'>
-            The system
-          </p>
-          <h1 className='text-[27px] leading-[1.15] font-[650] tracking-[-0.035em]'>
-            A healthier rhythm, on autopilot.
-          </h1>
-          <p className='mt-[9px] max-w-[510px] text-sm leading-normal text-[var(--muted)]'>
-            Desk Detour runs quietly in the background and brings you back to
-            the right habit at the right time.
-          </p>
-        </div>
+    <main className='h-full overflow-y-auto px-9 pt-[34px] pb-7 [scrollbar-color:#c9d0ca_transparent] [scrollbar-width:thin]'>
+      <header className='min-h-[67px] max-w-[510px]'>
+        <p className='mb-1 text-[11px] font-[750] text-[var(--primary)] uppercase'>
+          The system
+        </p>
+        <h1 className='text-[27px] leading-[1.15] font-[650]'>
+          A healthier routine, on autopilot.
+        </h1>
+        <p className='mt-[9px] text-sm leading-normal text-[var(--muted)]'>
+          Desk Detour runs quietly in the background and brings you back to the
+          right habit at the right time.
+        </p>
       </header>
 
       <section className='mt-[25px] grid grid-cols-3 gap-2.5'>
@@ -44,7 +42,7 @@ export default function HowItWorks() {
               <span className='grid size-[33px] place-items-center rounded-[10px] bg-[var(--primary-soft)] text-[var(--primary)] [&_svg]:size-4'>
                 <Icon aria-hidden='true' />
               </span>
-              <span className='absolute top-[18px] right-[15px] text-[10px] font-[750] tracking-[0.11em] text-[#a5ada8]'>
+              <span className='absolute top-[18px] right-[15px] text-[10px] font-[750] text-[#a5ada8]'>
                 0{index + 1}
               </span>
               <h2 className='mt-3.5 mb-1 text-[13px] font-[680]'>
@@ -59,7 +57,7 @@ export default function HowItWorks() {
       </section>
 
       <footer className='mt-[13px] flex items-center justify-between px-[3px] text-[10.5px] text-[var(--muted)]'>
-        <p className='m-0'>
+        <span>
           Made thoughtfully by{' '}
           <a
             className='group inline-flex items-center gap-[3px] font-bold text-[var(--primary)]'
@@ -73,7 +71,7 @@ export default function HowItWorks() {
               aria-hidden='true'
             />
           </a>
-        </p>
+        </span>
         <a
           className='group inline-flex items-center gap-[3px] font-bold text-[var(--primary)]'
           href='https://deskdetour.com/subscribe'

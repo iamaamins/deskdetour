@@ -13,24 +13,6 @@
   --warm-soft: #f7ecdc;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html,
-body,
-#root {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-}
-
-html {
-  background: var(--background);
-  scroll-behavior: smooth;
-  text-rendering: optimizeLegibility;
-}
-
 body {
   min-width: 720px;
   min-height: 100vh;
@@ -45,20 +27,6 @@ body {
     var(--background);
   font-family: 'Hanken Grotesk Variable', sans-serif;
   -webkit-font-smoothing: antialiased;
-}
-
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button {
-  font: inherit;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

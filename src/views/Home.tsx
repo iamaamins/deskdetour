@@ -19,6 +19,11 @@ const PHASE_LENGTHS = {
 
 export default function Home() {
   const [timer, setTimer] = useState<TimerState | null>(null);
+  const currentDate = new Intl.DateTimeFormat(undefined, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date());
 
   useEffect(() => {
     return window.timer.onUpdate((state) => setTimer(state));
@@ -33,7 +38,7 @@ export default function Home() {
 
   if (!timer) {
     return (
-      <main className='h-full w-full px-9 pt-[34px] pb-7'>
+      <main className='h-full px-9 pt-[34px] pb-7'>
         <div className='flex h-full flex-col items-center justify-center gap-3 text-[13px] text-[var(--muted)]'>
           <span className='size-[30px] animate-spin rounded-full border-[3px] border-[#dbe6de] border-t-[var(--primary)]' />
           <p>Starting your timer…</p>
@@ -58,7 +63,7 @@ export default function Home() {
         }
       : {
           key: 'work' as const,
-          label: 'Focus time',
+          label: 'Work time',
           helper: 'Stay with the task at hand',
           icon: IoDesktopOutline,
         };
@@ -86,13 +91,13 @@ export default function Home() {
       : IoFitnessOutline;
 
   return (
-    <main className='h-full w-full px-9 pt-[34px] pb-7'>
+    <main className='h-full px-9 pt-[34px] pb-7'>
       <header className='flex min-h-[67px] items-start justify-between'>
         <div>
-          <p className='mb-1 text-[11px] font-[750] tracking-[0.13em] text-[var(--primary)] uppercase'>
-            Today's rhythm
+          <p className='mb-1 text-[11px] font-[750] text-[var(--primary)] uppercase'>
+            {currentDate}
           </p>
-          <h1 className='text-[27px] leading-[1.15] font-[650] tracking-[-0.035em]'>
+          <h1 className='text-[27px] leading-[1.15] font-[650]'>
             Build healthy habits.
           </h1>
         </div>
@@ -140,7 +145,7 @@ export default function Home() {
 
           <div className='relative my-auto h-[min(244px,35vh)] w-[min(244px,35vh)]'>
             <svg
-              className='h-full w-full -rotate-90'
+              className='size-full -rotate-90'
               viewBox='0 0 216 216'
               aria-hidden='true'
             >
@@ -168,10 +173,10 @@ export default function Home() {
               className='absolute inset-0 flex flex-col items-center justify-center'
               aria-label={`${minutes}:${seconds}`}
             >
-              <span className='text-[clamp(48px,8vh,64px)] leading-none font-[580] tracking-[-0.065em] [font-variant-numeric:tabular-nums]'>
+              <span className='text-[clamp(48px,8vh,64px)] leading-none font-[580] [font-variant-numeric:tabular-nums]'>
                 {minutes}:{seconds}
               </span>
-              <small className='mt-[7px] text-[10px] font-bold tracking-[0.15em] text-[var(--muted)] uppercase'>
+              <small className='mt-[7px] text-[10px] font-bold text-[var(--muted)] uppercase'>
                 remaining
               </small>
             </div>
@@ -205,7 +210,7 @@ export default function Home() {
 
         <div className='flex min-w-0 flex-col gap-3'>
           <article className='flex-none rounded-[17px] border border-[rgba(223,228,223,0.92)] bg-[rgba(255,255,255,0.88)] p-[18px] shadow-[0_18px_50px_rgba(36,52,43,0.08)]'>
-            <p className='mb-1 text-[11px] font-[750] tracking-[0.13em] text-[var(--primary)] uppercase'>
+            <p className='mb-1 text-[11px] font-[750] text-[var(--primary)] uppercase'>
               Coming up
             </p>
             <div className='mt-3 flex items-center gap-2.5'>
@@ -215,14 +220,14 @@ export default function Home() {
               <div className='flex flex-col'>
                 <strong className='text-sm font-[650]'>{nextLabel}</strong>
                 <span className='text-[11.5px] text-[var(--muted)]'>
-                  After this timer
+                  After this session
                 </span>
               </div>
             </div>
           </article>
 
           <article className='flex-1 rounded-[17px] border border-[rgba(223,228,223,0.92)] bg-[rgba(255,255,255,0.88)] p-[18px] shadow-[0_18px_50px_rgba(36,52,43,0.08)]'>
-            <p className='mb-1 text-[11px] font-[750] tracking-[0.13em] text-[var(--primary)] uppercase'>
+            <p className='mb-1 text-[11px] font-[750] text-[var(--primary)] uppercase'>
               Movement cycle
             </p>
             <div

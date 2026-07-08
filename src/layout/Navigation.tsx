@@ -24,8 +24,8 @@ const navItems = [
 
 export default function Navigation() {
   return (
-    <aside className='relative z-[2] flex flex-col border-r border-[rgba(218,224,218,0.9)] bg-[rgba(248,249,246,0.78)] px-4 pt-7 pb-5 [backdrop-filter:blur(18px)]'>
-      <div className='flex items-center gap-2.5 px-2 text-base font-bold tracking-[-0.02em]'>
+    <aside className='flex flex-col border-r border-[rgba(218,224,218,0.9)] bg-[rgba(248,249,246,0.78)] px-4 pt-7 pb-5 [backdrop-filter:blur(18px)]'>
+      <div className='flex items-center gap-2.5 px-2 text-base font-bold'>
         <span
           className='relative grid size-[27px] place-items-center rounded-[9px] bg-[var(--ink)] shadow-[0_5px_14px_rgba(23,34,29,0.18)]'
           aria-hidden='true'
@@ -34,7 +34,7 @@ export default function Navigation() {
           <span className='absolute h-[13px] w-[3px] rounded-full bg-white' />
           <span className='absolute h-2.5 w-[3px] translate-x-[5px] translate-y-[-2px] rounded-full bg-white' />
         </span>
-        <span>Desk Detour</span>
+        Desk Detour
       </div>
 
       <nav
@@ -48,12 +48,12 @@ export default function Navigation() {
             end={end}
             className={({ isActive }) =>
               isActive
-                ? 'flex items-center gap-[11px] rounded-[11px] bg-[var(--primary-soft)] px-[11px] py-2.5 text-[14.5px] font-[650] text-[var(--primary)] transition-[color,background,transform] duration-150 hover:bg-[var(--primary-soft)] hover:text-[var(--primary)] active:scale-[0.98] [&_svg]:size-[19px] [&_svg]:shrink-0 [&_svg]:stroke-[1.7]'
+                ? 'flex items-center gap-[11px] rounded-[11px] bg-[var(--primary-soft)] px-[11px] py-2.5 text-[14.5px] font-[650] text-[var(--primary)] transition-transform duration-150 active:scale-[0.98] [&_svg]:size-[19px] [&_svg]:shrink-0 [&_svg]:stroke-[1.7]'
                 : 'flex items-center gap-[11px] rounded-[11px] px-[11px] py-2.5 text-[14.5px] font-[550] text-[var(--muted-strong)] transition-[color,background,transform] duration-150 hover:bg-[rgba(228,232,226,0.66)] hover:text-[var(--ink)] active:scale-[0.98] [&_svg]:size-[19px] [&_svg]:shrink-0 [&_svg]:stroke-[1.7]'
             }
           >
             <Icon aria-hidden='true' />
-            <span>{label}</span>
+            {label}
           </NavLink>
         ))}
       </nav>
@@ -65,7 +65,7 @@ export default function Navigation() {
         className='mt-auto flex h-[43px] items-center gap-2.5 border-t border-[var(--line)] px-2.5 pt-[11px] text-[12.5px] font-[650] text-[var(--muted)] transition-[color,transform] duration-150 hover:text-[var(--primary)] active:scale-[0.98] [&_svg]:size-[18px] [&_svg]:shrink-0 [&_svg]:stroke-[1.8]'
       >
         <IoHeartOutline aria-hidden='true' />
-        <span>Support the app</span>
+        Support the app
       </a>
     </aside>
   );

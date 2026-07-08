@@ -7,7 +7,7 @@ export const EXERCISES = [
       'A classic upper body exercise that strengthens your chest, shoulders, triceps, and core.',
   },
   {
-    name: 'Bodyweight Squats',
+    name: 'Squats',
     quantity: 15,
     url: 'https://youtu.be/l83R5PblSMA?si=Av7YaKEccNlGkTML',
     description:
