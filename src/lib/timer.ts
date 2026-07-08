@@ -128,6 +128,7 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
 }
 
 export function resetTimer() {
+  state.isIdle = false;
   state.isPaused = false;
   state.isViewTime = false;
   state.isMoveTime = false;
