@@ -172,7 +172,13 @@ export function handleEvents(
     resumeTimer();
     updateTrayMenu();
   });
-  powerMonitor.on('lock-screen', stopTimers);
+  powerMonitor.on('lock-screen', () => {
+    stopTimers();
+    updateTrayMenu();
+  });
   powerMonitor.on('shutdown', stopTimers);
-  powerMonitor.on('unlock-screen', () => startTimers(app, mainWindow, tray));
+  powerMonitor.on('unlock-screen', () => {
+    startTimers(app, mainWindow, tray);
+    updateTrayMenu();
+  });
 }
