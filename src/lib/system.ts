@@ -65,10 +65,7 @@ export function createMainWindow() {
   return mainWindow;
 }
 
-export function createTray(
-  app: App,
-  mainWindow: BrowserWindow,
-) {
+export function createTray(app: App, mainWindow: BrowserWindow) {
   const tray = new Tray(getTrayIconPath(app));
 
   const updateTrayMenu = () => {
@@ -83,13 +80,6 @@ export function createTray(
       },
       { type: 'separator' },
       {
-        label: 'Reset Timer',
-        click: () => {
-          resetTimer();
-          updateTrayMenu();
-        },
-      },
-      {
         label: 'Pause Timer',
         visible: !isPaused,
         click: () => {
@@ -102,6 +92,13 @@ export function createTray(
         visible: isPaused,
         click: () => {
           resumeTimer();
+          updateTrayMenu();
+        },
+      },
+      {
+        label: 'Reset Timer',
+        click: () => {
+          resetTimer();
           updateTrayMenu();
         },
       },
