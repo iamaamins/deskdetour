@@ -11,6 +11,7 @@ import {
   resumeTimer,
   stopTimers,
   isTimerPaused,
+  isTimerIdle,
 } from './timer';
 import { isDev, isMac } from './config';
 import { getTrayIconPath, openAllowedExternalUrl } from './utils';
@@ -70,6 +71,7 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
 
   const updateTrayMenu = () => {
     const isPaused = isTimerPaused();
+    const isIdle = isTimerIdle();
     const contextMenu = Menu.buildFromTemplate([
       {
         label: `Open ${app.name}`,
@@ -81,7 +83,7 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
       { type: 'separator' },
       {
         label: 'Pause Timer',
-        visible: !isPaused,
+        visible: !isPaused && !isIdle,
         click: () => {
           pauseTimer();
           updateTrayMenu();
@@ -89,7 +91,7 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
       },
       {
         label: 'Resume Timer',
-        visible: isPaused,
+        visible: isPaused && !isIdle,
         click: () => {
           resumeTimer();
           updateTrayMenu();

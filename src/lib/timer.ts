@@ -66,6 +66,7 @@ function updateDisplays(
 }
 
 export const isTimerPaused = () => state.isPaused;
+export const isTimerIdle = () => state.isIdle;
 
 export function pauseTimer() {
   state.isPaused = true;
