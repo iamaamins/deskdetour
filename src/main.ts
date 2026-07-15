@@ -15,7 +15,7 @@ app.on('ready', () => {
   const { tray, updateTrayMenu } = createTray(app, mainWindow);
   createApplicationMenu(app);
 
-  startTimers(app, mainWindow, tray);
+  startTimers(app, mainWindow, tray, updateTrayMenu);
 
   mainWindow.on('close', (e) => {
     e.preventDefault();

@@ -69,14 +69,21 @@ export const isTimerPaused = () => state.isPaused;
 export const isTimerIdle = () => state.isIdle;
 
 export function pauseTimer() {
+  if (state.isIdle) return;
   state.isPaused = true;
 }
 
 export function resumeTimer() {
+  if (state.isIdle) return;
   state.isPaused = false;
 }
 
-export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
+export function startTimers(
+  app: App,
+  mainWindow: BrowserWindow,
+  tray: Tray,
+  updateTrayMenu: () => void,
+) {
   if (mainTimer) clearInterval(mainTimer);
   if (idleTimer) clearInterval(idleTimer);
 
@@ -123,8 +130,14 @@ export function startTimers(app: App, mainWindow: BrowserWindow, tray: Tray) {
   }, 1000);
 
   idleTimer = setInterval(() => {
-    const idleTime = powerMonitor.getSystemIdleTime();
-    state.isIdle = idleTime >= IDLE_THRESHOLD;
+    if (state.isPaused) return;
+
+    const isIdle = powerMonitor.getSystemIdleTime() >= IDLE_THRESHOLD;
+
+    if (isIdle !== state.isIdle) {
+      state.isIdle = isIdle;
+      updateTrayMenu();
+    }
   }, 10 * 1000);
 }
 
@@ -179,7 +192,7 @@ export function handleEvents(
   });
   powerMonitor.on('shutdown', stopTimers);
   powerMonitor.on('unlock-screen', () => {
-    startTimers(app, mainWindow, tray);
+    startTimers(app, mainWindow, tray, updateTrayMenu);
     updateTrayMenu();
   });
 }
