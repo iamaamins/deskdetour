@@ -11,11 +11,7 @@ import {
 } from 'react-icons/io5';
 import { Link } from 'react-router';
 
-const PHASE_LENGTHS = {
-  work: 15 * 60,
-  view: 20,
-  move: 2 * 60,
-} as const;
+const PHASE_LENGTHS = { work: 15 * 60, view: 20 } as const;
 
 export default function Home() {
   const [timer, setTimer] = useState<TimerState | null>(null);
@@ -69,10 +65,13 @@ export default function Home() {
         };
 
   const PhaseIcon = phase.icon;
-  const progress = Math.max(
-    0,
-    Math.min(1, timer.timeRemaining / PHASE_LENGTHS[phase.key]),
-  );
+  const phaseLength =
+    phase.key === 'move'
+      ? timer.isLongMoveBreaksEnabled
+        ? 5 * 60
+        : 2.5 * 60
+      : PHASE_LENGTHS[phase.key];
+  const progress = Math.max(0, Math.min(1, timer.timeRemaining / phaseLength));
   const progressOffset = 603.19 * (1 - progress);
   const minutes = Math.floor(timer.timeRemaining / 60);
   const seconds = Math.floor(timer.timeRemaining % 60)

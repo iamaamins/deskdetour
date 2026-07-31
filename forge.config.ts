@@ -13,7 +13,7 @@ const config: ForgeConfig = {
     asar: true,
     icon: './src/assets/icon',
     extraResource: ['./src/assets'],
-    appBundleId: 'com.deskdetour.health',
+    appBundleId: 'com.deskdetour.system',
   },
   rebuildConfig: {},
   makers: [

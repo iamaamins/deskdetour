@@ -1,4 +1,4 @@
-import { MOVE_TIME, VIEW_TIME, WORK_TIME } from './config';
+import { VIEW_TIME, WORK_TIME } from './config';
 
 export const NOTIFICATION = {
   work: {
@@ -11,6 +11,6 @@ export const NOTIFICATION = {
   },
   move: {
     title: 'Move Time!',
-    body: `Move/exercise for ${MOVE_TIME / 60} minutes`,
+    body: (duration: number) => `Move/exercise for ${duration / 60} minutes`,
   },
 } as const;

@@ -4,6 +4,7 @@ export type TimerState = {
   isWorkTime: boolean;
   isViewTime: boolean;
   isMoveTime: boolean;
+  isLongMoveBreaksEnabled: boolean;
   timeRemaining: number;
   sessionCount: number;
 };
@@ -15,6 +16,8 @@ declare global {
       reset: () => Promise<void>;
       pause: () => Promise<void>;
       resume: () => Promise<void>;
+      enableLongMoveBreaks: () => Promise<void>;
+      disableLongMoveBreaks: () => Promise<void>;
     };
   }
 }

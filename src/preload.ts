@@ -26,4 +26,8 @@ contextBridge.exposeInMainWorld('timer', {
   reset: () => ipcRenderer.invoke('timer:reset'),
   pause: () => ipcRenderer.invoke('timer:pause'),
   resume: () => ipcRenderer.invoke('timer:resume'),
+  enableLongMoveBreaks: () =>
+    ipcRenderer.invoke('timer:enable-long-move-breaks'),
+  disableLongMoveBreaks: () =>
+    ipcRenderer.invoke('timer:disable-long-move-breaks'),
 });

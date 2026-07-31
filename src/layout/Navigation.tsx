@@ -3,6 +3,7 @@ import {
   IoHeartOutline,
   IoHomeOutline,
   IoInformationCircleOutline,
+  IoSettingsOutline,
 } from 'react-icons/io5';
 import { NavLink } from 'react-router';
 
@@ -20,12 +21,18 @@ const navItems = [
     icon: IoInformationCircleOutline,
     end: false,
   },
+  {
+    to: '/settings',
+    label: 'Settings',
+    icon: IoSettingsOutline,
+    end: false,
+  },
 ] as const;
 
 export default function Navigation() {
   return (
     <aside className='flex flex-col border-r border-[rgba(218,224,218,0.9)] bg-[rgba(248,249,246,0.78)] px-4 pt-7 pb-5 [backdrop-filter:blur(18px)]'>
-      <div className='flex items-center gap-2.5 whitespace-nowrap px-2 text-base font-bold'>
+      <div className='flex items-center gap-2.5 px-2 text-base font-bold whitespace-nowrap'>
         <span
           className='relative grid size-[27px] place-items-center rounded-[9px] bg-[var(--ink)] shadow-[0_5px_14px_rgba(23,34,29,0.18)]'
           aria-hidden='true'

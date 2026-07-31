@@ -11,12 +11,12 @@ export const HOW_IT_WORKS = [
   {
     title: 'Move Notification',
     description:
-      'After 2 work sessions, notifies you to take a 2-minute movement break.',
+      'After 2 work sessions, starts a 5-minute movement break, adjustable to 2.5 minutes.',
   },
   {
     title: 'Idle Detection',
     description:
-      'Automatically pauses after 5 minutes of inactivity, resuming on return.',
+      'Automatically pauses after 7.5 minutes of inactivity, resuming on return.',
   },
   {
     title: 'Hands-Free Operation',

@@ -12,7 +12,7 @@ export default function Exercises() {
           Small moves, real momentum.
         </h1>
         <p className='mt-[9px] text-sm leading-normal text-[var(--muted)]'>
-          Pick one for your two-minute break, or simply walk and stretch if that
+          Pick one for your movement break, or simply walk and stretch if that
           works better for your space.
         </p>
       </header>

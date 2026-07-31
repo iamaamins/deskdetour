@@ -10,8 +10,11 @@ import {
   pauseTimer,
   resumeTimer,
   stopTimers,
-  isTimerPaused,
-  isTimerIdle,
+  getIsTimerPaused,
+  getIsTimerIdle,
+  getIsLongMoveBreaksEnabled,
+  enableLongMoveBreaks,
+  disableLongMoveBreaks,
 } from './timer';
 import { isDev, isMac } from './config';
 import { getTrayIconPath, openAllowedExternalUrl } from './utils';
@@ -70,8 +73,10 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
   const tray = new Tray(getTrayIconPath(app));
 
   const updateTrayMenu = () => {
-    const isPaused = isTimerPaused();
-    const isIdle = isTimerIdle();
+    const isPaused = getIsTimerPaused();
+    const isIdle = getIsTimerIdle();
+    const isLongMoveBreaksEnabled = getIsLongMoveBreaksEnabled();
+
     const contextMenu = Menu.buildFromTemplate([
       {
         label: `Open ${app.name}`,
@@ -101,6 +106,23 @@ export function createTray(app: App, mainWindow: BrowserWindow) {
         label: 'Reset Timer',
         click: () => {
           resetTimer();
+          updateTrayMenu();
+        },
+      },
+      { type: 'separator' },
+      {
+        label: 'Enable Long Move Breaks',
+        visible: !isLongMoveBreaksEnabled,
+        click: () => {
+          enableLongMoveBreaks();
+          updateTrayMenu();
+        },
+      },
+      {
+        label: 'Disable Long Move Breaks',
+        visible: isLongMoveBreaksEnabled,
+        click: () => {
+          disableLongMoveBreaks(app);
           updateTrayMenu();
         },
       },

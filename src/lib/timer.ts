@@ -2,7 +2,8 @@ import { App, BrowserWindow, ipcMain, powerMonitor, Tray } from 'electron';
 import {
   VIEW_TIME,
   IDLE_THRESHOLD,
-  MOVE_TIME,
+  LONG_MOVE_TIME,
+  SHORT_MOVE_TIME,
   WORK_TIME,
   SESSION_THRESHOLD,
 } from './config';
@@ -23,12 +24,16 @@ const state: TimerState = {
   isPaused: false,
   isViewTime: false,
   isMoveTime: false,
+  isLongMoveBreaksEnabled: true,
   sessionCount: 0,
   isWorkTime: true,
   timeRemaining: WORK_TIME,
 };
 
 const getTimerState = () => ({ ...state });
+
+const getMoveTime = () =>
+  state.isLongMoveBreaksEnabled ? LONG_MOVE_TIME : SHORT_MOVE_TIME;
 
 const getPauseReason = (): PauseReason =>
   state.isPaused ? 'manual' : state.isIdle ? 'idle' : null;
@@ -65,8 +70,41 @@ function updateDisplays(
   }
 }
 
-export const isTimerPaused = () => state.isPaused;
-export const isTimerIdle = () => state.isIdle;
+export const getIsTimerPaused = () => state.isPaused;
+export const getIsTimerIdle = () => state.isIdle;
+export const getIsLongMoveBreaksEnabled = () => state.isLongMoveBreaksEnabled;
+
+function transitionToNextSession(app: App) {
+  if (state.isWorkTime) {
+    notify(NOTIFICATION.view.title, NOTIFICATION.view.body);
+    playNotificationSound(app, 'view');
+    state.timeRemaining = VIEW_TIME;
+    state.isWorkTime = false;
+    state.isViewTime = true;
+    state.isMoveTime = false;
+    state.sessionCount++;
+    return;
+  }
+
+  if (state.isViewTime && state.sessionCount >= SESSION_THRESHOLD) {
+    const moveTime = getMoveTime();
+    notify(NOTIFICATION.move.title, NOTIFICATION.move.body(moveTime));
+    playNotificationSound(app, 'move');
+    state.timeRemaining = moveTime;
+    state.isWorkTime = false;
+    state.isViewTime = false;
+    state.isMoveTime = true;
+    state.sessionCount = 0;
+    return;
+  }
+
+  notify(NOTIFICATION.work.title, NOTIFICATION.work.body);
+  playNotificationSound(app, 'break-over');
+  state.timeRemaining = WORK_TIME;
+  state.isWorkTime = true;
+  state.isViewTime = false;
+  state.isMoveTime = false;
+}
 
 export function pauseTimer() {
   if (state.isIdle) return;
@@ -76,6 +114,26 @@ export function pauseTimer() {
 export function resumeTimer() {
   if (state.isIdle) return;
   state.isPaused = false;
+}
+
+export function enableLongMoveBreaks() {
+  if (state.isLongMoveBreaksEnabled) return;
+
+  state.isLongMoveBreaksEnabled = true;
+
+  if (state.isMoveTime) state.timeRemaining += LONG_MOVE_TIME - SHORT_MOVE_TIME;
+}
+
+export function disableLongMoveBreaks(app: App) {
+  if (!state.isLongMoveBreaksEnabled) return;
+
+  state.isLongMoveBreaksEnabled = false;
+
+  if (state.isMoveTime) {
+    state.timeRemaining -= LONG_MOVE_TIME - SHORT_MOVE_TIME;
+
+    if (state.timeRemaining <= 0) transitionToNextSession(app);
+  }
 }
 
 export function startTimers(
@@ -93,37 +151,7 @@ export function startTimers(
     if (!pauseReason) {
       state.timeRemaining--;
 
-      if (state.timeRemaining <= 0) {
-        if (state.isWorkTime) {
-          notify(NOTIFICATION.view.title, NOTIFICATION.view.body);
-          playNotificationSound(app, 'view');
-          state.timeRemaining = VIEW_TIME;
-          state.isViewTime = true;
-          state.sessionCount++;
-          state.isWorkTime = false;
-        } else if (state.isViewTime) {
-          if (state.sessionCount < SESSION_THRESHOLD) {
-            notify(NOTIFICATION.work.title, NOTIFICATION.work.body);
-            playNotificationSound(app, 'break-over');
-            state.timeRemaining = WORK_TIME;
-            state.isWorkTime = true;
-          } else {
-            notify(NOTIFICATION.move.title, NOTIFICATION.move.body);
-            playNotificationSound(app, 'move');
-            state.timeRemaining = MOVE_TIME;
-            state.isMoveTime = true;
-            state.sessionCount = 0;
-          }
-
-          state.isViewTime = false;
-        } else if (state.isMoveTime) {
-          notify(NOTIFICATION.work.title, NOTIFICATION.work.body);
-          playNotificationSound(app, 'break-over');
-          state.timeRemaining = WORK_TIME;
-          state.isWorkTime = true;
-          state.isMoveTime = false;
-        }
-      }
+      if (state.timeRemaining <= 0) transitionToNextSession(app);
     }
 
     updateDisplays(mainWindow, tray, pauseReason);
@@ -146,6 +174,7 @@ export function resetTimer() {
   state.isPaused = false;
   state.isViewTime = false;
   state.isMoveTime = false;
+  state.isLongMoveBreaksEnabled = true;
   state.sessionCount = 0;
   state.isWorkTime = true;
   state.timeRemaining = WORK_TIME;
@@ -184,6 +213,16 @@ export function handleEvents(
   ipcMain.handle('timer:resume', (event) => {
     assertTrustedSender(event, mainWindow);
     resumeTimer();
+    updateTrayMenu();
+  });
+  ipcMain.handle('timer:enable-long-move-breaks', (event) => {
+    assertTrustedSender(event, mainWindow);
+    enableLongMoveBreaks();
+    updateTrayMenu();
+  });
+  ipcMain.handle('timer:disable-long-move-breaks', (event) => {
+    assertTrustedSender(event, mainWindow);
+    disableLongMoveBreaks(app);
     updateTrayMenu();
   });
   powerMonitor.on('lock-screen', () => {
